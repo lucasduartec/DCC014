@@ -3,7 +3,6 @@
  **************************************************************************************************/
 
 #include "Node.h"
-#include "Edge.h"
 #include <iostream>
 
 using namespace std;
