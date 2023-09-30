@@ -42,6 +42,11 @@ Edge *Node::getFirstEdge()
     return this->firstEdge;
 }
 
+Edge *Node::getLastEdge()
+{
+    return this->lastEdge;
+}
+
 int Node::getId() const
 {
     return this->id;
@@ -69,6 +74,22 @@ void Node::incrementDegree()
     this->degree++;
 }
 
-//TODO
-// void Node::insertEdge(int sourceId, int targetId, string direction);
-
+void Node::insertEdge(int sourceId, int targetId, string direction)
+{
+    // Verifies whether there are at least one edge in the node
+    if (this->firstEdge != nullptr)
+    {
+        // Allocating the new edge and keeping the integrity of the edge list
+        Edge *edge = new Edge(sourceId, targetId);
+        edge->setDirection(direction);
+        this->lastEdge->setNextEdge(edge);
+        this->lastEdge = edge;
+    }
+    else
+    {
+        // Allocating the new edge and keeping the integrity of the edge list
+        this->firstEdge = new Edge(sourceId, targetId);
+        this->firstEdge->setDirection(direction);
+        this->lastEdge = this->firstEdge;
+    }
+}

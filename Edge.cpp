@@ -8,12 +8,12 @@
 using namespace std;
 
 // Construtor
-Edge::Edge(int sourceId, int targetId, string direction)
+Edge::Edge(int sourceId, int targetId)
 {
     this->sourceId = sourceId;
     this->targetId = targetId;
     this->nextEdge = nullptr;
-    this->direction = direction;
+    this->direction = "";
 }
 
 // Destrutor

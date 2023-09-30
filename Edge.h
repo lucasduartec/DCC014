@@ -18,7 +18,7 @@ private:
 
 public:
     // Construtor
-    Edge(int sourceId, int targetId, string direction);
+    Edge(int sourceId, int targetId);
 
     // Destrutor
     ~Edge();

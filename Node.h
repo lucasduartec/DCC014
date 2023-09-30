@@ -7,18 +7,19 @@
 
 using namespace std;
 
-//Definição da classe nó 
+// Definição da classe nó
 
-class Node 
+class Node
 {
-    //attributes 
-    private:
+    // attributes
+private:
     Edge *firstEdge;
-    int id; 
+    Edge *lastEdge;
+    int id;
     Node *nextNode;
-    unsigned int degree; 
+    unsigned int degree;
 
-    public: 
+public:
     // Constructor
     Node(int id);
 
@@ -27,6 +28,7 @@ class Node
 
     // Getters
     Edge *getFirstEdge();
+    Edge *getLastEdge();
     int getId() const;
     int getDegree();
     Node *getNextNode();
@@ -34,7 +36,7 @@ class Node
     // Setters
     void setNextNode(Node *node);
 
-    //Other methods
+    // Other methods
     void incrementDegree();
 
     // Manipulation methods
