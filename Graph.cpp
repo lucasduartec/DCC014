@@ -2,15 +2,13 @@
  * Defining the Graph's methods
  **************************************************************************************************/
 
-
 #include "Graph.h"
 #include "Edge.h"
 
 using namespace std;
 
-
 // Construtor
-Graph::Graph(int order, bool directed, bool weightedEdge, bool weightedNode)
+Graph::Graph()
 {
     this->firstNode = this->lastNode = nullptr;
     this->nodeIdCounter = 0;
@@ -49,9 +47,9 @@ Node *Graph::getLastNode()
     return this->lastNode;
 }
 
-Node *Graph::insertNode()
+Node *Graph::insertNode(string tag)
 {
-    Node *newNode = new Node(nodeIdCounter++);
+    Node *newNode = new Node(nodeIdCounter++, tag);
     if (lastNode == nullptr)
     {
         firstNode = newNode;
@@ -65,28 +63,18 @@ Node *Graph::insertNode()
     return newNode;
 }
 
-//TODO: 
-// void Graph::insertEdge(Node *sourceNode, Node *targetNode, string direction)
-// {
-//     if (sourceNode != nullptr && targetNode != nullptr)
-//     {
-//         int sourceNodeId = sourceNode->getId();
-//         int targetNodeId = targetNode->getId();
-//         int sourceNodeLabel = sourceNode->getLabel();
-//         int targetNodeLabel = targetNode->getLabel();
-//         sourceNode->insertEdge(sourceNodeId, sourceNodeLabel, targetNodeId, targetNodeLabel, weight);
-//         if (!directed)
-//         {
-//             targetNode->insertEdge(targetNodeId, targetNodeLabel, sourceNodeId, sourceNodeLabel, weight);
-//             sourceNode->incrementInDegree();
-//             targetNode->incrementOutDegree();
-//         }
-//     }
-
-//     sourceNode->incrementOutDegree();
-//     targetNode->incrementInDegree();
-//     numberEdges++;
-// }
+void Graph::insertEdge(Node *sourceNode, Node *targetNode, string direction)
+{
+    if (sourceNode != nullptr && targetNode != nullptr)
+    {
+        int sourceNodeId = sourceNode->getId();
+        int targetNodeId = targetNode->getId();
+        sourceNode->insertEdge(sourceNodeId, targetNodeId, direction);
+        targetNode->insertEdge(sourceNodeId, targetNodeId, direction);
+        sourceNode->incrementDegree();
+        targetNode->incrementDegree();
+    }
+}
 
 bool Graph::searchNode(int id)
 {

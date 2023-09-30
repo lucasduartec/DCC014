@@ -18,10 +18,11 @@ private:
     int id;
     Node *nextNode;
     unsigned int degree;
+    string tag;
 
 public:
     // Constructor
-    Node(int id);
+    Node(int id, string tag);
 
     // Destructor
     ~Node();
@@ -32,6 +33,7 @@ public:
     int getId() const;
     int getDegree();
     Node *getNextNode();
+    string getTag();
 
     // Setters
     void setNextNode(Node *node);

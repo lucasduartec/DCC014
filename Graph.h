@@ -17,7 +17,7 @@ private:
 
 public:
     // Constructor
-    Graph(int order, bool directed, bool weightedEdge, bool weightedNode);
+    Graph();
 
     // Destructor
     ~Graph();
@@ -28,7 +28,7 @@ public:
     Node *getLastNode();
 
     // Manipulation methods
-    Node *insertNode();
+    Node *insertNode(string tag);
     void insertEdge(Node *sourceNode, Node *targetNode, string direction);
 
     // Aux methods

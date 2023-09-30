@@ -10,12 +10,13 @@ using namespace std;
 
 
 // Construtor
-Node::Node(int id)
+Node::Node(int id, string tag)
 {
     this->id = id;
     this->degree = 0;
     this->firstEdge = nullptr;
     this->nextNode = nullptr;
+    this->tag = tag;
 };
 
 // Destrutor
@@ -34,6 +35,7 @@ Node::~Node()
     this->degree = 0;
     this->firstEdge = nullptr;
     this->nextNode = nullptr;
+    this->tag = " ";
 };
 
 // Getters
@@ -60,6 +62,11 @@ int Node::getDegree()
 Node *Node::getNextNode()
 {
     return this->nextNode;
+}
+
+string Node::getTag()
+{
+    return this->tag;
 }
 
 // Setters
