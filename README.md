@@ -4,12 +4,12 @@ Implementação do trabalho da disciplina DCC014 - Inteligência Artificial dura
 
 ##### Compilação
 
-Para compilar o projeto, esteja no diretório principal `maze` e execute a seguinte sequência de comandos:<br/>
+Para compilar o projeto, esteja no diretório principal `maze` e execute a seguinte sequência de comandos no terminal:<br/>
 `cmake -B build`<br/>
 `cd build`<br/>
 `make`<br/>
 
 ##### Execução
 
-Para executar, apenas digite:<br/>
+Para executar, digite no terminal:<br/>
 `./main`
