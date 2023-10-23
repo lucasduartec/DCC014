@@ -46,9 +46,9 @@ Node *Graph::getLastNode()
     return this->lastNode;
 }
 
-Node *Graph::insertNode(string tag)
+Node *Graph::insertNode(string tag, string position)
 {
-    Node *newNode = new Node(nodeIdCounter++, tag);
+    Node *newNode = new Node(nodeIdCounter++, tag, position);
     if (lastNode == nullptr)
     {
         firstNode = newNode;
@@ -113,7 +113,7 @@ void Graph::displayGraph()
 
 void Graph::generateLabyrinth()
 {
-    Node *node0 = this->insertNode("inicial");
+    Node *node0 = this->insertNode("inicial", "");
     Node *node1 = this->insertNode("intermediario");
     Node *node2 = this->insertNode("intermediario");
     Node *node3 = this->insertNode("intermediario");

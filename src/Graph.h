@@ -28,7 +28,7 @@ public:
     Node *getLastNode();
 
     // Manipulation methods
-    Node *insertNode(string tag);
+    Node *insertNode(string tag, string position);
     void insertEdge(Node *sourceNode, Node *targetNode, int direction);
 
     // Aux methods

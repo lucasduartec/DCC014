@@ -19,10 +19,11 @@ private:
     Node *nextNode;
     unsigned int degree; //verificar se ele já tem o maximo de filhos (4)
     string tag; //inicial ou final 
+    string position; //posição para o graphviz
 
 public:
     // Constructor
-    Node(int id, string tag);
+    Node(int id, string tag, string position);
 
     // Destructor
     ~Node();
@@ -34,6 +35,7 @@ public:
     int getDegree();
     Node *getNextNode();
     string getTag();
+    string getPosition();
 
     // Setters
     void setNextNode(Node *node);

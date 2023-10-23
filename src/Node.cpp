@@ -9,13 +9,14 @@ using namespace std;
 
 
 // Construtor
-Node::Node(int id, string tag)
+Node::Node(int id, string tag, string position)
 {
     this->id = id;
     this->degree = 0;
     this->firstEdge = nullptr;
     this->nextNode = nullptr;
     this->tag = tag;
+    this->position = position;
 };
 
 // Destrutor
@@ -35,6 +36,7 @@ Node::~Node()
     this->firstEdge = nullptr;
     this->nextNode = nullptr;
     this->tag = " ";
+    this->position = " ";
 };
 
 // Getters

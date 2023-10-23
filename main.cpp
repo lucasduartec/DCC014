@@ -96,8 +96,7 @@ string exportGraphToDotFormat(Graph *graph)
 int main(int argc, char const *argv[])
 {
     Graph *graph = new Graph();
-
-
+    graph->generateLabyrinth();
 
     cout << exportGraphToDotFormat(graph);
 
