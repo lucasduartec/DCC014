@@ -111,9 +111,8 @@ void Graph::displayGraph()
     }
 }
 
-void Graph::generateLabyrinty()
+void Graph::generateLabyrinth()
 {
-
     Node *node0 = this->insertNode("inicial");
     Node *node1 = this->insertNode("intermediario");
     Node *node2 = this->insertNode("intermediario");
@@ -161,7 +160,7 @@ void Graph::generateLabyrinty()
     // 2 -- baixo
     // 3 -- direita
 
-    this->insertEdge(node0, node1,3);
+    this->insertEdge(node0, node1, 3);
     this->insertEdge(node1, node2, 2);
     this->insertEdge(node2, node3, 1);
     this->insertEdge(node0, node4, 2);
@@ -182,4 +181,23 @@ void Graph::generateLabyrinty()
     this->insertEdge(node18, node19, 2);
     this->insertEdge(node19, node20, 3);
     this->insertEdge(node17, node21, 0);
+    this->insertEdge(node21, node22, 1);
+    this->insertEdge(node22, node23, 0);
+    this->insertEdge(node23, node24, 3);
+    this->insertEdge(node24, node25, 2);
+    this->insertEdge(node25, node26, 3);
+    this->insertEdge(node26, node27, 2);
+    this->insertEdge(node27, node28, 3);
+    this->insertEdge(node28, node29, 0);
+    this->insertEdge(node26, node30, 0);
+    this->insertEdge(node30, node31, 3);
+    this->insertEdge(node31, node32, 2);
+    this->insertEdge(node32, node33, 1);
+    this->insertEdge(node33, node34, 2);
+    this->insertEdge(node34, node35, 3);
+    this->insertEdge(node35, node36, 0);
+    this->insertEdge(node34, node37, 1);
+    this->insertEdge(node37, node38, 2);
+    this->insertEdge(node38, node39, 1);
+    this->insertEdge(node38, node40, 3);
 }
