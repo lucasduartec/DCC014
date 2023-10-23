@@ -92,3 +92,18 @@ Node *Graph::getNodeById(int id)
     }
     return nullptr;
 }
+
+void Graph::displayGraph() {
+    Node *currentNode = firstNode;
+    while (currentNode != nullptr) {
+        cout << "Node ID: " << currentNode->getId() << ", Tag: " << currentNode->getTag() << endl;
+
+        Edge *currentEdge = currentNode->getFirstEdge();
+        while (currentEdge != nullptr) {
+            cout << "  -> Edge: Source ID: " << currentEdge->getSourceId() << ", Target ID: " << currentEdge->getTargetId() << ", Direction: " << currentEdge->getDirection() << endl;
+            currentEdge = currentEdge->getNextEdge();
+        }
+
+        currentNode = currentNode->getNextNode();
+    }
+}

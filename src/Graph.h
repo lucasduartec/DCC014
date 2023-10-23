@@ -34,4 +34,5 @@ public:
     // Aux methods
     bool searchNode(int id);
     Node *getNodeById(int id);
+    void displayGraph();
 };

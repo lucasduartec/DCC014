@@ -17,8 +17,8 @@ private:
     Edge *lastEdge;
     int id;
     Node *nextNode;
-    unsigned int degree;
-    string tag;
+    unsigned int degree; //verificar se ele já tem o maximo de filhos (4)
+    string tag; //inicial ou final 
 
 public:
     // Constructor
