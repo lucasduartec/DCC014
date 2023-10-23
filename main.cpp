@@ -60,9 +60,12 @@ string exportGraphToDotFormat(Graph *graph)
 
     dot += "graph grafo {\n";
     while (nextNode != nullptr)
+
     {
         dot += "  " + to_string(nextNode->getId()) +
-               " [weight = " + formatFloat(nextNode->getId(), 2, 5) + "]";
+               " [weight = " + formatFloat(nextNode->getId(), 2, 5) +
+               ", pos = " + nextNode->getPosition() + "!]";
+
         // if (weightedNode)
         //     dot += " [xlabel = " + formatFloat(nextNode->getWeight(), 0, 5) + "]";
         dot += ";\n";

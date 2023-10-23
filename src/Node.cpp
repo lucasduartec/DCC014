@@ -7,7 +7,6 @@
 
 using namespace std;
 
-
 // Construtor
 Node::Node(int id, string tag, string position)
 {
@@ -76,7 +75,7 @@ void Node::setNextNode(Node *nextNode)
     this->nextNode = nextNode;
 }
 
-//Other Methods
+// Other Methods
 void Node::incrementDegree()
 {
     this->degree++;
@@ -100,4 +99,9 @@ void Node::insertEdge(int sourceId, int targetId, int direction)
         this->firstEdge->setDirection(direction);
         this->lastEdge = this->firstEdge;
     }
+}
+
+string Node::getPosition()
+{
+    return this->position;
 }
