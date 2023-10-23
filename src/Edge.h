@@ -13,7 +13,7 @@ private:
     //attributes 
     int sourceId;
     int targetId;
-    string direction; 
+    int direction; 
     Edge *nextEdge;
 
 public:
@@ -27,9 +27,9 @@ public:
     int getSourceId();
     int getTargetId();
     Edge *getNextEdge();
-    string getDirection();
+    int getDirection();
 
     // Setters
     void setNextEdge(Edge *edge);
-    void setDirection(string direction);
+    void setDirection(int direction);
 };

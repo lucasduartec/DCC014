@@ -42,5 +42,5 @@ public:
     void incrementDegree();
 
     // Manipulation methods
-    void insertEdge(int sourceId, int targetId, string direction);
+    void insertEdge(int sourceId, int targetId, int direction);
 };

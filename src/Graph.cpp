@@ -62,7 +62,7 @@ Node *Graph::insertNode(string tag)
     return newNode;
 }
 
-void Graph::insertEdge(Node *sourceNode, Node *targetNode, string direction)
+void Graph::insertEdge(Node *sourceNode, Node *targetNode, int direction)
 {
     if (sourceNode != nullptr && targetNode != nullptr)
     {
@@ -93,17 +93,93 @@ Node *Graph::getNodeById(int id)
     return nullptr;
 }
 
-void Graph::displayGraph() {
+void Graph::displayGraph()
+{
     Node *currentNode = firstNode;
-    while (currentNode != nullptr) {
+    while (currentNode != nullptr)
+    {
         cout << "Node ID: " << currentNode->getId() << ", Tag: " << currentNode->getTag() << endl;
 
         Edge *currentEdge = currentNode->getFirstEdge();
-        while (currentEdge != nullptr) {
+        while (currentEdge != nullptr)
+        {
             cout << "  -> Edge: Source ID: " << currentEdge->getSourceId() << ", Target ID: " << currentEdge->getTargetId() << ", Direction: " << currentEdge->getDirection() << endl;
             currentEdge = currentEdge->getNextEdge();
         }
 
         currentNode = currentNode->getNextNode();
     }
+}
+
+void Graph::generateLabyrinty()
+{
+
+    Node *node0 = this->insertNode("inicial");
+    Node *node1 = this->insertNode("intermediario");
+    Node *node2 = this->insertNode("intermediario");
+    Node *node3 = this->insertNode("intermediario");
+    Node *node4 = this->insertNode("intermediario");
+    Node *node5 = this->insertNode("intermediario");
+    Node *node6 = this->insertNode("intermediario");
+    Node *node7 = this->insertNode("intermediario");
+    Node *node8 = this->insertNode("intermediario");
+    Node *node9 = this->insertNode("intermediario");
+    Node *node10 = this->insertNode("intermediario");
+    Node *node11 = this->insertNode("intermediario");
+    Node *node12 = this->insertNode("intermediario");
+    Node *node13 = this->insertNode("intermediario");
+    Node *node14 = this->insertNode("intermediario");
+    Node *node15 = this->insertNode("intermediario");
+    Node *node16 = this->insertNode("intermediario");
+    Node *node17 = this->insertNode("intermediario");
+    Node *node18 = this->insertNode("intermediario");
+    Node *node19 = this->insertNode("intermediario");
+    Node *node20 = this->insertNode("intermediario");
+    Node *node21 = this->insertNode("intermediario");
+    Node *node22 = this->insertNode("intermediario");
+    Node *node23 = this->insertNode("intermediario");
+    Node *node24 = this->insertNode("intermediario");
+    Node *node25 = this->insertNode("intermediario");
+    Node *node26 = this->insertNode("intermediario");
+    Node *node27 = this->insertNode("intermediario");
+    Node *node28 = this->insertNode("intermediario");
+    Node *node29 = this->insertNode("intermediario");
+    Node *node30 = this->insertNode("intermediario");
+    Node *node31 = this->insertNode("intermediario");
+    Node *node32 = this->insertNode("intermediario");
+    Node *node33 = this->insertNode("intermediario");
+    Node *node34 = this->insertNode("intermediario");
+    Node *node35 = this->insertNode("intermediario");
+    Node *node36 = this->insertNode("intermediario");
+    Node *node37 = this->insertNode("intermediario");
+    Node *node38 = this->insertNode("intermediario");
+    Node *node39 = this->insertNode("intermediario");
+    Node *node40 = this->insertNode("final");
+
+    // 0 -- cima
+    // 1 -- esq
+    // 2 -- baixo
+    // 3 -- direita
+
+    this->insertEdge(node0, node1,3);
+    this->insertEdge(node1, node2, 2);
+    this->insertEdge(node2, node3, 1);
+    this->insertEdge(node0, node4, 2);
+    this->insertEdge(node4, node5, 3);
+    this->insertEdge(node5, node6, 2);
+    this->insertEdge(node6, node7, 3);
+    this->insertEdge(node7, node8, 0);
+    this->insertEdge(node8, node9, 3);
+    this->insertEdge(node6, node10, 1);
+    this->insertEdge(node10, node11, 2);
+    this->insertEdge(node11, node12, 3);
+    this->insertEdge(node12, node13, 0);
+    this->insertEdge(node13, node14, 3);
+    this->insertEdge(node14, node15, 2);
+    this->insertEdge(node15, node16, 3);
+    this->insertEdge(node14, node17, 0);
+    this->insertEdge(node17, node18, 3);
+    this->insertEdge(node18, node19, 2);
+    this->insertEdge(node19, node20, 3);
+    this->insertEdge(node17, node21, 0);
 }

@@ -80,7 +80,7 @@ void Node::incrementDegree()
     this->degree++;
 }
 
-void Node::insertEdge(int sourceId, int targetId, string direction)
+void Node::insertEdge(int sourceId, int targetId, int direction)
 {
     // Verifies whether there are at least one edge in the node
     if (this->firstEdge != nullptr)

@@ -97,15 +97,7 @@ int main(int argc, char const *argv[])
 {
     Graph *graph = new Graph();
 
-    Node *node0 = graph->insertNode("inicial");
-    Node *node1 = graph->insertNode("intermediario");
-    Node *node2 = graph->insertNode("intermediario");
-    Node *node3 = graph->insertNode("final");
 
-    graph->insertEdge(node0, node1, "cima");
-    graph->insertEdge(node0, node2, "baixo");
-    graph->insertEdge(node1, node2, "baixo");
-    graph->insertEdge(node2, node3, "baixo");
 
     cout << exportGraphToDotFormat(graph);
 

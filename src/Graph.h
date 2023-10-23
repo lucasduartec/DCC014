@@ -29,10 +29,12 @@ public:
 
     // Manipulation methods
     Node *insertNode(string tag);
-    void insertEdge(Node *sourceNode, Node *targetNode, string direction);
+    void insertEdge(Node *sourceNode, Node *targetNode, int direction);
 
     // Aux methods
     bool searchNode(int id);
     Node *getNodeById(int id);
     void displayGraph();
+
+    void generateLabyrinty();
 };
