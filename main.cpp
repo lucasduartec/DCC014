@@ -64,11 +64,17 @@ string exportGraphToDotFormat(Graph *graph)
     {
         dot += "  " + to_string(nextNode->getId()) +
                " [weight = " + formatFloat(nextNode->getId(), 2, 5) +
-               ", pos = " + aspasDuplas + nextNode->getPosition() + "!" + aspasDuplas + "]";
+               ", pos = " + aspasDuplas + nextNode->getPosition() + "!" + aspasDuplas ;
 
-        // if (weightedNode)
-        //     dot += " [xlabel = " + formatFloat(nextNode->getWeight(), 0, 5) + "]";
-        dot += ";\n";
+        if (nextNode->getTag() == "inicial")
+            dot += ", color = red";
+
+
+        if (nextNode->getTag() == "final")
+            dot += ", color = green";
+
+        dot += "];\n";
+
         nextNode = nextNode->getNextNode();
     }
     nextNode = graph->getFirstNode();
