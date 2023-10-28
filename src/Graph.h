@@ -36,5 +36,5 @@ public:
     Node *getNodeById(int id);
     void displayGraph();
 
-    void generateLabyrinth();
+    void generateMaze();
 };

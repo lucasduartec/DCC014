@@ -111,7 +111,7 @@ void Graph::displayGraph()
     }
 }
 
-void Graph::generateLabyrinth()
+void Graph::generateMaze()
 {
     Node *node0 = this->insertNode("inicial", "0,4");
     Node *node1 = this->insertNode("intermediario", "2,4");
@@ -123,37 +123,37 @@ void Graph::generateLabyrinth()
     Node *node7 = this->insertNode("intermediario", "2,1");
     Node *node8 = this->insertNode("intermediario", "2,2");
     Node *node9 = this->insertNode("intermediario", "3,2");
-    Node *node10 = this->insertNode("intermediario","0,1");
-    Node *node11 = this->insertNode("intermediario","0,0");
-    Node *node12 = this->insertNode("intermediario","3,0");
-    Node *node13 = this->insertNode("intermediario","3,1");
-    Node *node14 = this->insertNode("intermediario","4,1");
-    Node *node15 = this->insertNode("intermediario","4,0");
-    Node *node16 = this->insertNode("intermediario","5,0");
-    Node *node17 = this->insertNode("intermediario","4,2");
-    Node *node18 = this->insertNode("intermediario","5,2");
-    Node *node19 = this->insertNode("intermediario","5,1");
-    Node *node20 = this->insertNode("intermediario","6,1");
-    Node *node21 = this->insertNode("intermediario","4,3");
-    Node *node22 = this->insertNode("intermediario","3,3");
-    Node *node23 = this->insertNode("intermediario","3,4");
-    Node *node24 = this->insertNode("intermediario","5,4");
-    Node *node25 = this->insertNode("intermediario","5,3");
-    Node *node26 = this->insertNode("intermediario","6,3");
-    Node *node27 = this->insertNode("intermediario","6,2");
-    Node *node28 = this->insertNode("intermediario","7,2");
-    Node *node29 = this->insertNode("intermediario","7,3");
-    Node *node30 = this->insertNode("intermediario","6,4");
-    Node *node31 = this->insertNode("intermediario","9,4");
-    Node *node32 = this->insertNode("intermediario","9,3");
-    Node *node33 = this->insertNode("intermediario","8,3");
-    Node *node34 = this->insertNode("intermediario","8,1");
-    Node *node35 = this->insertNode("intermediario","9,1");
-    Node *node36 = this->insertNode("intermediario","9,2");
-    Node *node37 = this->insertNode("intermediario","7,1");
-    Node *node38 = this->insertNode("intermediario","7,0");
-    Node *node39 = this->insertNode("intermediario","6,0");
-    Node *node40 = this->insertNode("final","9,0");
+    Node *node10 = this->insertNode("intermediario", "0,1");
+    Node *node11 = this->insertNode("intermediario", "0,0");
+    Node *node12 = this->insertNode("intermediario", "3,0");
+    Node *node13 = this->insertNode("intermediario", "3,1");
+    Node *node14 = this->insertNode("intermediario", "4,1");
+    Node *node15 = this->insertNode("intermediario", "4,0");
+    Node *node16 = this->insertNode("intermediario", "5,0");
+    Node *node17 = this->insertNode("intermediario", "4,2");
+    Node *node18 = this->insertNode("intermediario", "5,2");
+    Node *node19 = this->insertNode("intermediario", "5,1");
+    Node *node20 = this->insertNode("intermediario", "6,1");
+    Node *node21 = this->insertNode("intermediario", "4,3");
+    Node *node22 = this->insertNode("intermediario", "3,3");
+    Node *node23 = this->insertNode("intermediario", "3,4");
+    Node *node24 = this->insertNode("intermediario", "5,4");
+    Node *node25 = this->insertNode("intermediario", "5,3");
+    Node *node26 = this->insertNode("intermediario", "6,3");
+    Node *node27 = this->insertNode("intermediario", "6,2");
+    Node *node28 = this->insertNode("intermediario", "7,2");
+    Node *node29 = this->insertNode("intermediario", "7,3");
+    Node *node30 = this->insertNode("intermediario", "6,4");
+    Node *node31 = this->insertNode("intermediario", "9,4");
+    Node *node32 = this->insertNode("intermediario", "9,3");
+    Node *node33 = this->insertNode("intermediario", "8,3");
+    Node *node34 = this->insertNode("intermediario", "8,1");
+    Node *node35 = this->insertNode("intermediario", "9,1");
+    Node *node36 = this->insertNode("intermediario", "9,2");
+    Node *node37 = this->insertNode("intermediario", "7,1");
+    Node *node38 = this->insertNode("intermediario", "7,0");
+    Node *node39 = this->insertNode("intermediario", "6,0");
+    Node *node40 = this->insertNode("final", "9,0");
 
     // 0 -- cima
     // 1 -- esq

@@ -1,5 +1,6 @@
 #include "Graph.h"
 #include <iostream>
+#include <fstream>
 #include <iomanip>
 #include <string>
 #include <string.h>
@@ -64,11 +65,10 @@ string exportGraphToDotFormat(Graph *graph)
     {
         dot += "  " + to_string(nextNode->getId()) +
                " [weight = " + formatFloat(nextNode->getId(), 2, 5) +
-               ", pos = " + aspasDuplas + nextNode->getPosition() + "!" + aspasDuplas ;
+               ", pos = " + aspasDuplas + nextNode->getPosition() + "!" + aspasDuplas;
 
         if (nextNode->getTag() == "inicial")
             dot += ", color = red";
-
 
         if (nextNode->getTag() == "final")
             dot += ", color = green";
@@ -102,12 +102,33 @@ string exportGraphToDotFormat(Graph *graph)
     return dot;
 }
 
+void writeGraphOnOutputFile(Graph *graph)
+{
+    // Abra o arquivo "output.dot" e apague o conteúdo antigo
+    std::ofstream outputFile("output.dot", std::ios::trunc);
+
+    if (outputFile.is_open())
+    {
+        // Chame a função exportGraphToDotFormat e escreva o resultado no arquivo
+        outputFile << exportGraphToDotFormat(graph);
+
+        // Feche o arquivo
+        outputFile.close();
+    }
+    else
+    {
+        std::cerr << "Erro ao abrir o arquivo 'output.dot'." << std::endl;
+    }
+}
+
 int main(int argc, char const *argv[])
 {
     Graph *graph = new Graph();
-    graph->generateLabyrinth();
+    graph->generateMaze();
 
-    cout << exportGraphToDotFormat(graph);
+    writeGraphOnOutputFile(graph);
+
+    delete graph;
 
     return 0;
 }
