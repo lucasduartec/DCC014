@@ -8,7 +8,8 @@
 using namespace std;
 
 // Variável global para armazenar um caminho
-std::string pathGlobal = "/home/rodrigosoares/codigos/Faculdade/5 Periodo/IA/maze";
+
+// std::string pathGlobal = "/home/rodrigosoares/codigos/Faculdade/5 Periodo/IA/maze";
 
 string formatFloat(float value, int precision, int totalLength)
 {
