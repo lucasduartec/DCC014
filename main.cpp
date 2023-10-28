@@ -7,14 +7,9 @@
 #include <cfloat>
 using namespace std;
 
-/****************
- * Funcao    : string formatFloat(float value, int precision, int totalLength)  	                *
- * Descricao : Converte float para string com parâmteros especificados                              *
- * Parametros: value - valor em float a ser formatado                                               *
- *             precision - precisão das casas decimais                                              *
- *             totalLength - comprimento total da string retornada                                  *
- * Retorno   : string formatada.                                                                    *
- ***************/
+// Variável global para armazenar um caminho
+std::string pathGlobal = "/home/rodrigosoares/codigos/Faculdade/5 Periodo/IA/maze";
+
 string formatFloat(float value, int precision, int totalLength)
 {
     string returnString = "";
@@ -32,13 +27,6 @@ string formatFloat(float value, int precision, int totalLength)
     return returnString;
 }
 
-/****************
- * Funcao    : string exportGraphToDotFormat(Graph *graph, bool isPERT) 	                        *
- * Descricao : Cria string com a descrição de um grafo no formato .DOT                              *
- * Parametros: graph - objeto do tipo Graph, de que as informações serão extraídas                  *
- *             isPERT - define se o grafo pode ser utilizado para Rede PERT, ou seja, é multiaresta *
- * Retorno   : descrição no formato .DOT.                                                           *
- ***************/
 string exportGraphToDotFormat(Graph *graph)
 { // dot -Tpng output.dot -o graph1.png
     if (graph == nullptr)
@@ -104,8 +92,11 @@ string exportGraphToDotFormat(Graph *graph)
 
 void writeGraphOnOutputFile(Graph *graph)
 {
-    // Abra o arquivo "output.dot" e apague o conteúdo antigo
-    std::ofstream outputFile("output.dot", std::ios::trunc);
+    // Especifique o caminho completo para a pasta onde deseja salvar o arquivo "output.dot"
+    std::string outputPath = pathGlobal + "/output.dot"; // Substitua pelo caminho desejado
+
+    // Abra o arquivo "output.dot" no caminho especificado e apague o conteúdo antigo
+    std::ofstream outputFile(outputPath, std::ios::trunc);
 
     if (outputFile.is_open())
     {
