@@ -13,3 +13,8 @@ Para compilar o projeto, esteja no diretório principal `maze` e execute a segui
 
 Para executar, digite no terminal:<br/>
 `./main`
+
+##### Visualizar o grafo
+
+Para visualizar o grafo execute:<br/>
+`dot -Kfdp -n -Tpng -o grafo.png output.dot`
