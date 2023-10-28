@@ -7,10 +7,6 @@
 #include <cfloat>
 using namespace std;
 
-// Variável global para armazenar um caminho
-
-// std::string pathGlobal = "/home/rodrigosoares/codigos/Faculdade/5 Periodo/IA/maze";
-
 string formatFloat(float value, int precision, int totalLength)
 {
     string returnString = "";
@@ -94,7 +90,7 @@ string exportGraphToDotFormat(Graph *graph)
 void writeGraphOnOutputFile(Graph *graph)
 {
     // Especifique o caminho completo para a pasta onde deseja salvar o arquivo "output.dot"
-    std::string outputPath = pathGlobal + "/output.dot"; // Substitua pelo caminho desejado
+    std::string outputPath = "../output.dot"; // Substitua pelo caminho desejado
 
     // Abra o arquivo "output.dot" no caminho especificado e apague o conteúdo antigo
     std::ofstream outputFile(outputPath, std::ios::trunc);
