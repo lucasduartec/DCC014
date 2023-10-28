@@ -1,20 +1,20 @@
 /**************************************************************************************************
- * Defining the Graph's methods
+ * Defining the Tree's methods
  **************************************************************************************************/
 
-#include "Graph.h"
+#include "Tree.h"
 
 using namespace std;
 
 // Construtor
-Graph::Graph()
+Tree::Tree()
 {
     this->firstNode = this->lastNode = nullptr;
     this->nodeIdCounter = 0;
 }
 
 // Destrutor
-Graph::~Graph()
+Tree::~Tree()
 {
     Node *nextNode = this->firstNode;
 
@@ -32,21 +32,21 @@ Graph::~Graph()
 
 // Getters
 
-int Graph::getNodeIdCounter()
+int Tree::getNodeIdCounter()
 {
     return this->nodeIdCounter;
 }
 
-Node *Graph::getFirstNode()
+Node *Tree::getFirstNode()
 {
     return this->firstNode;
 }
-Node *Graph::getLastNode()
+Node *Tree::getLastNode()
 {
     return this->lastNode;
 }
 
-Node *Graph::insertNode(string tag, string position)
+Node *Tree::insertNode(string tag, string position)
 {
     Node *newNode = new Node(nodeIdCounter++, tag, position);
     if (lastNode == nullptr)
@@ -62,7 +62,7 @@ Node *Graph::insertNode(string tag, string position)
     return newNode;
 }
 
-void Graph::insertEdge(Node *sourceNode, Node *targetNode, int direction)
+void Tree::insertEdge(Node *sourceNode, Node *targetNode, int direction)
 {
     if (sourceNode != nullptr && targetNode != nullptr)
     {
@@ -75,12 +75,12 @@ void Graph::insertEdge(Node *sourceNode, Node *targetNode, int direction)
     }
 }
 
-bool Graph::searchNode(int id)
+bool Tree::searchNode(int id)
 {
     return this->getNodeById(id) != nullptr;
 }
 
-Node *Graph::getNodeById(int id)
+Node *Tree::getNodeById(int id)
 {
     Node *nextNode = this->firstNode;
     while (nextNode != nullptr)
@@ -93,7 +93,7 @@ Node *Graph::getNodeById(int id)
     return nullptr;
 }
 
-void Graph::displayGraph()
+void Tree::displayTree()
 {
     Node *currentNode = firstNode;
     while (currentNode != nullptr)
@@ -111,7 +111,7 @@ void Graph::displayGraph()
     }
 }
 
-void Graph::generateMaze()
+void Tree::generateMaze()
 {
     Node *node0 = this->insertNode("inicial", "0,4");
     Node *node1 = this->insertNode("intermediario", "2,4");
