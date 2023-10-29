@@ -12,6 +12,7 @@ class TreeNode
 {
 
 private:
+    int state;
     TreeNode *father;
     TreeNode *topChild;
     TreeNode *leftChild;
@@ -20,7 +21,7 @@ private:
 
 public:
     // Construtor
-    TreeNode();
+    TreeNode(int state);
 
     // Destrutor
     ~TreeNode();
@@ -41,11 +42,14 @@ public:
 };
 
 // Construtor
-TreeNode::TreeNode(){};
+TreeNode::TreeNode(int state){
+    this->state = state;
+};
 
 // Destrutor
 TreeNode::~TreeNode()
 {
+    this->state = -1;
     this->father = nullptr;
     this->topChild = nullptr;
     this->leftChild = nullptr;
