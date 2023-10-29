@@ -11,9 +11,7 @@ class Tree
 {
     // attributes
 private:
-    Node *firstNode;
-    Node *lastNode;
-    int nodeIdCounter;
+    TreeNode *root;
 
 public:
     // Constructor
@@ -22,19 +20,24 @@ public:
     // Destructor
     ~Tree();
 
-    // getters
-    int getNodeIdCounter();
-    Node *getFirstNode();
-    Node *getLastNode();
-
-    // Manipulation methods
-    Node *insertNode(string tag, string position);
-    void insertEdge(Node *sourceNode, Node *targetNode, int direction);
-
-    // Aux methods
-    bool searchNode(int id);
-    Node *getNodeById(int id);
-    void displayTree();
-
-    void generateMaze();
+    void insert(TreeNode *node);
+    void remove(TreeNode *node);
+    void clearTree();
 };
+
+// Construtor
+Tree::Tree()
+{
+    this->root = nullptr;
+}
+
+// Destrutor
+Tree::~Tree()
+{
+    this->root = nullptr;
+}
+
+void Tree::clearTree()
+{
+    this->root = nullptr;
+}

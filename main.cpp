@@ -1,4 +1,5 @@
-#include "Graph.h"
+#include "include/maze/Graph.h"
+#include "include/tree/Tree.h"
 #include <iostream>
 #include <fstream>
 #include <iomanip>
