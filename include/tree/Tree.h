@@ -2,7 +2,7 @@
  * Implementation of the TAD Tree
  **************************************************************************************************/
 
-#include "Node.h"
+#include "TreeNode.h"
 #include <iostream>
 
 using namespace std;
