@@ -2,6 +2,9 @@
  * Implementation of the TAD Node
  **************************************************************************************************/
 
+#ifndef TREENODE_H
+#define TREENODE_H
+
 #include <list>
 
 using namespace std;
@@ -19,6 +22,8 @@ private:
     TreeNode *downChild;
     TreeNode *rightChild;
 
+    int availableRules[4];
+
 public:
     // Construtor
     TreeNode(int state);
@@ -32,6 +37,7 @@ public:
     TreeNode *getLeftChild();
     TreeNode *getDownChild();
     TreeNode *getRightChild();
+    int *getAvailableRules();
 
     // Setters
     void setFather(TreeNode *node);
@@ -39,12 +45,14 @@ public:
     void setLeftChild(TreeNode *node);
     void setDownChild(TreeNode *node);
     void setRightChild(TreeNode *node);
+    void setAvailableRules(int availableRules[4]);
 };
 
 // Construtor
-TreeNode::TreeNode(int state){
+TreeNode::TreeNode(int state)
+{
     this->state = state;
-};
+}
 
 // Destrutor
 TreeNode::~TreeNode()
@@ -55,7 +63,7 @@ TreeNode::~TreeNode()
     this->leftChild = nullptr;
     this->downChild = nullptr;
     this->rightChild = nullptr;
-};
+}
 
 // Getters
 TreeNode *TreeNode::getFather()
@@ -109,3 +117,18 @@ void TreeNode::setRightChild(TreeNode *node)
 {
     this->rightChild = node;
 }
+
+int *TreeNode::getAvailableRules()
+{
+    return availableRules;
+}
+
+void TreeNode::setAvailableRules(int rules[4])
+{
+    for (int i = 0; i < 4; i++)
+    {
+        availableRules[i] = rules[i];
+    }
+}
+
+#endif // TREENODE_H

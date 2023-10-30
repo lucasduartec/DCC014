@@ -112,12 +112,15 @@ void writeGraphOnOutputFile(Graph *graph)
 
 int main(int argc, char const *argv[])
 {
-    Graph *graph = new Graph();
-    graph->generateMaze();
+    Graph *maze = new Graph();
+    maze->generateMaze();
 
-    writeGraphOnOutputFile(graph);
+    writeGraphOnOutputFile(maze);
 
-    delete graph;
+    Tree *test = new Tree();
+    test->backtrackingSearch(maze);
+
+    delete maze;
 
     return 0;
 }
