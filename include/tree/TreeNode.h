@@ -6,6 +6,7 @@
 #define TREENODE_H
 
 #include <list>
+#include "Edge.h"
 
 using namespace std;
 
@@ -22,7 +23,11 @@ private:
     TreeNode *downChild;
     TreeNode *rightChild;
 
-    int availableRules[4];
+    // Regra usada para chegar naquele nó
+    int usedRule;
+
+    // Regras disponíveis aplicáveis a partir daquele nó
+    Edge *availableRules[4];
 
 public:
     // Construtor
@@ -37,7 +42,8 @@ public:
     TreeNode *getLeftChild();
     TreeNode *getDownChild();
     TreeNode *getRightChild();
-    int *getAvailableRules();
+    int getUsedRule();
+    Edge **getAvailableRules();
 
     // Setters
     void setFather(TreeNode *node);
@@ -45,7 +51,8 @@ public:
     void setLeftChild(TreeNode *node);
     void setDownChild(TreeNode *node);
     void setRightChild(TreeNode *node);
-    void setAvailableRules(int availableRules[4]);
+    void setUsedRule(int usedRule);
+    void setAvailableRules(Edge *rules[4]);
 };
 
 // Construtor
@@ -63,6 +70,7 @@ TreeNode::~TreeNode()
     this->leftChild = nullptr;
     this->downChild = nullptr;
     this->rightChild = nullptr;
+    this->usedRule = -1;
 }
 
 // Getters
@@ -89,6 +97,16 @@ TreeNode *TreeNode::getDownChild()
 TreeNode *TreeNode::getRightChild()
 {
     return this->rightChild;
+}
+
+int TreeNode::getUsedRule()
+{
+    return this->usedRule;
+}
+
+Edge **TreeNode::getAvailableRules()
+{
+    return availableRules;
 }
 
 // Setters
@@ -118,12 +136,12 @@ void TreeNode::setRightChild(TreeNode *node)
     this->rightChild = node;
 }
 
-int *TreeNode::getAvailableRules()
+void TreeNode::setUsedRule(int usedRule)
 {
-    return availableRules;
+    this->usedRule = usedRule;
 }
 
-void TreeNode::setAvailableRules(int rules[4])
+void TreeNode::setAvailableRules(Edge *rules[4])
 {
     for (int i = 0; i < 4; i++)
     {

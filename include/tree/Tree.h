@@ -23,7 +23,7 @@ public:
     // Destructor
     ~Tree();
 
-    void insert(TreeNode *node);
+    void insert(TreeNode *currentState, TreeNode *newTreeNode, int directionTaken);
     void remove(TreeNode *node);
     void backtrackingSearch(Graph *maze);
     void backtrackingSearchAux(Node *currentMazeNode, TreeNode *currentState, Graph *maze);
@@ -40,6 +40,59 @@ Tree::Tree()
 Tree::~Tree()
 {
     this->root = nullptr;
+}
+
+void Tree::insert(TreeNode *currentState, TreeNode *newTreeNode, int directionTaken)
+{
+    // Seta pai
+    newTreeNode->setFather(currentState);
+
+    // Seta filho de acordo com a regra usada
+    switch (directionTaken)
+    {
+
+    case 0:
+        currentState->setTopChild(newTreeNode);
+        break;
+
+    case 1:
+        currentState->setLeftChild(newTreeNode);
+        break;
+
+    case 2:
+        currentState->setDownChild(newTreeNode);
+        break;
+
+    case 3:
+        currentState->setRightChild(newTreeNode);
+        break;
+    }
+
+    newTreeNode->setUsedRule(directionTaken);
+}
+
+void Tree::remove(TreeNode *node)
+{
+    switch (node->getUsedRule())
+    {
+    case 0:
+        node->getFather()->setTopChild(nullptr);
+        break;
+
+    case 1:
+        node->getFather()->setLeftChild(nullptr);
+        break;
+
+    case 2:
+        node->getFather()->setDownChild(nullptr);
+        break;
+
+    case 3:
+        node->getFather()->setRightChild(nullptr);
+        break;
+    }
+
+    node = nullptr;
 }
 
 void Tree::clearTree()
@@ -91,12 +144,13 @@ void Tree::backtrackingSearchAux(Node *currentMazeNode, TreeNode *currentState, 
     sortArray(availableRules, 4);
 
     // Teste de impressão: direções das arestas do nó atual
-    //  cout << currentMazeNode->getId() << endl;
-    //  for (int i = 0; i < 4; i++)
-    //{
-    //     if (availableRules[i] != nullptr)
-    //         cout << availableRules[i]->getDirection() << " ";
-    // }
+    cout << "Antes de usar a regra: " << endl;
+    cout << currentMazeNode->getId() << endl;
+    for (int i = 0; i < 4; i++)
+    {
+        if (availableRules[i] != nullptr)
+            cout << availableRules[i]->getDirection() << " ";
+    }
 
     for (int i = 0; i < 4; i++)
     {
@@ -108,30 +162,21 @@ void Tree::backtrackingSearchAux(Node *currentMazeNode, TreeNode *currentState, 
             TreeNode *newTreeNode = new TreeNode(chosenEdge->getTargetId());
 
             // Insere novo nó na árvore
-            this->insert(newTreeNode);
-
-            // Seta pai
-            newTreeNode->setFather(currentState);
-
-            // Seta filho de acordo com a regra usada
-            switch (chosenEdge->getDirection())
-            {
-
-            case 0:
-                currentState->setTopChild(newTreeNode);
-
-            case 1:
-                currentState->setLeftChild(newTreeNode);
-
-            case 2:
-                currentState->setDownChild(newTreeNode);
-
-            case 3:
-                currentState->setRightChild(newTreeNode);
-            }
+            this->insert(currentState, newTreeNode, chosenEdge->getDirection());
 
             // Remove aquela regra da lista de possíveis
             availableRules[i] = nullptr;
+
+            // Seta regras disponíveis daquele novo nó
+            newTreeNode->setAvailableRules(availableRules);
+
+            cout << "Depois de usar a regra: " << endl;
+            cout << currentMazeNode->getId() << endl;
+            for (int i = 0; i < 4; i++)
+            {
+                if (availableRules[i] != nullptr)
+                    cout << availableRules[i]->getDirection() << " ";
+            }
 
             Node *newCurrentMazeNode = maze->getNodeById(chosenEdge->getTargetId());
             backtrackingSearchAux(newCurrentMazeNode, newTreeNode, maze);

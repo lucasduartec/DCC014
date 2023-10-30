@@ -3,6 +3,7 @@
         "*.h ": "cpp",
         "new": "cpp",
         "iostream": "cpp",
-        "iomanip": "cpp"
+        "iomanip": "cpp",
+        "unordered_map": "cpp"
     }
 }
