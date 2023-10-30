@@ -26,7 +26,7 @@ public:
     void insert(TreeNode *node);
     void remove(TreeNode *node);
     void backtrackingSearch(Graph *maze);
-    bool backtrackingSearchAux(Node *currentMazeNode, TreeNode *currentState);
+    void backtrackingSearchAux(Node *currentMazeNode, TreeNode *currentState, Graph *maze);
     void clearTree();
 };
 
@@ -65,18 +65,21 @@ void sortArray(Edge *edges[], int numEdges)
     }
 }
 
-bool Tree::backtrackingSearchAux(Node *currentMazeNode, TreeNode *currentState)
+void Tree::backtrackingSearchAux(Node *currentMazeNode, TreeNode *currentState, Graph *maze)
 {
     if (currentMazeNode->getTag() == "final")
     {
-        return true;
+        return;
     }
 
+    // Vetor de regras possíveis aplicáveis
     Edge *availableRules[4] = {nullptr, nullptr, nullptr, nullptr};
-    int index = 0;
 
     Edge *edge = currentMazeNode->getFirstEdge();
 
+    int index = 0;
+
+    // Preenche vetor de regras com as arestas que saem daquele nó
     while (edge != nullptr && index < 4)
     {
         availableRules[index] = edge;
@@ -84,30 +87,62 @@ bool Tree::backtrackingSearchAux(Node *currentMazeNode, TreeNode *currentState)
         edge = edge->getNextEdge();
     }
 
+    // Ordena vetor de regras em ordem crescente
     sortArray(availableRules, 4);
 
-    // Direções das arestas do nó atual
-    // cout << currentMazeNode->getId() << endl;
-    // for (int i = 0; i < 4; i++)
+    // Teste de impressão: direções das arestas do nó atual
+    //  cout << currentMazeNode->getId() << endl;
+    //  for (int i = 0; i < 4; i++)
     //{
-    //    if (availableRules[i] != nullptr)
-    //        cout << availableRules[i]->getDirection() << " ";
-    //}
+    //     if (availableRules[i] != nullptr)
+    //         cout << availableRules[i]->getDirection() << " ";
+    // }
 
     for (int i = 0; i < 4; i++)
     {
         if (availableRules[i] != nullptr)
         {
-            TreeNode *newTreeNode = new TreeNode(availableRules[i]->getDirection());
+            Edge *chosenEdge = availableRules[i];
+
+            // Cria novo nó cujo id é o nó destino daquela aresta no grafo
+            TreeNode *newTreeNode = new TreeNode(chosenEdge->getTargetId());
+
+            // Insere novo nó na árvore
+            this->insert(newTreeNode);
+
+            // Seta pai
+            newTreeNode->setFather(currentState);
+
+            // Seta filho de acordo com a regra usada
+            switch (chosenEdge->getDirection())
+            {
+
+            case 0:
+                currentState->setTopChild(newTreeNode);
+
+            case 1:
+                currentState->setLeftChild(newTreeNode);
+
+            case 2:
+                currentState->setDownChild(newTreeNode);
+
+            case 3:
+                currentState->setRightChild(newTreeNode);
+            }
+
+            // Remove aquela regra da lista de possíveis
+            availableRules[i] = nullptr;
+
+            Node *newCurrentMazeNode = maze->getNodeById(chosenEdge->getTargetId());
+            backtrackingSearchAux(newCurrentMazeNode, newTreeNode, maze);
         }
     }
 
-    return false;
+    return;
 }
 
 void Tree::backtrackingSearch(Graph *maze)
 {
-
     if (maze->getFirstNode() == nullptr)
     {
         return;
@@ -118,9 +153,7 @@ void Tree::backtrackingSearch(Graph *maze)
     TreeNode *currentState = new TreeNode(currentMazeNode->getId());
     this->root = currentState;
 
-    backtrackingSearchAux(currentMazeNode, currentState);
-
-    // currentState = currentState->getFather();
+    backtrackingSearchAux(currentMazeNode, currentState, maze);
 }
 
 #endif // TREE_H
