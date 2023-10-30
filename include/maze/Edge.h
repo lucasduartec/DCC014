@@ -2,6 +2,9 @@
  * Implementation of the TAD Edge
  **************************************************************************************************/
 
+#ifndef EDGE_H
+#define EDGE_H
+
 #include <string>
 
 using namespace std;
@@ -61,3 +64,5 @@ int Edge::getDirection() { return this->direction; }
 // Setters
 void Edge::setNextEdge(Edge *edge) { this->nextEdge = edge; }
 void Edge::setDirection(int direction) { this->direction = direction; }
+
+#endif // EDGE_H

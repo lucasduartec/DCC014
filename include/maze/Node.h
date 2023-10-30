@@ -2,6 +2,9 @@
  * Implementation of the TAD Node
  **************************************************************************************************/
 
+#ifndef NODE_H
+#define NODE_H
+
 #include "Edge.h"
 #include <list>
 
@@ -145,3 +148,5 @@ string Node::getPosition()
 {
     return this->position;
 }
+
+#endif // NODE_H

@@ -2,6 +2,9 @@
  * Implementation of the TAD Graph
  **************************************************************************************************/
 
+#ifndef GRAPH_H
+#define GRAPH_H
+
 using namespace std;
 
 #include <iostream>
@@ -75,6 +78,7 @@ Node *Graph::getFirstNode()
 {
     return this->firstNode;
 }
+
 Node *Graph::getLastNode()
 {
     return this->lastNode;
@@ -235,3 +239,5 @@ void Graph::generateMaze()
     this->insertEdge(node38, node39, 1);
     this->insertEdge(node38, node40, 3);
 }
+
+#endif // GRAPH_H
