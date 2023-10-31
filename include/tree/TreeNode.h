@@ -16,33 +16,35 @@ class TreeNode
 {
 
 private:
-    int state;
+    int id;
     TreeNode *father;
     TreeNode *topChild;
     TreeNode *leftChild;
     TreeNode *downChild;
     TreeNode *rightChild;
 
-    // Regra usada para chegar naquele nó
-    int usedRule;
+    // Aresta usada para chegar naquele nó
+    Edge *usedEdge;
 
     // Regras disponíveis aplicáveis a partir daquele nó
     Edge *availableRules[4];
 
 public:
     // Construtor
-    TreeNode(int state);
+    TreeNode(int id);
 
     // Destrutor
     ~TreeNode();
 
     // Getters
+    int getId() { return this->id; };
+
     TreeNode *getFather();
     TreeNode *getTopChild();
     TreeNode *getLeftChild();
     TreeNode *getDownChild();
     TreeNode *getRightChild();
-    int getUsedRule();
+    Edge *getUsedEdge();
     Edge **getAvailableRules();
 
     // Setters
@@ -51,26 +53,30 @@ public:
     void setLeftChild(TreeNode *node);
     void setDownChild(TreeNode *node);
     void setRightChild(TreeNode *node);
-    void setUsedRule(int usedRule);
+    void setUsedEdge(Edge *usedEdge);
     void setAvailableRules(Edge *rules[4]);
 };
 
 // Construtor
-TreeNode::TreeNode(int state)
+TreeNode::TreeNode(int id)
 {
-    this->state = state;
+    this->id = id;
+    for (int i = 0; i < 4; i++)
+        availableRules[i] = nullptr;
 }
 
 // Destrutor
 TreeNode::~TreeNode()
 {
-    this->state = -1;
+    this->id = -1;
     this->father = nullptr;
     this->topChild = nullptr;
     this->leftChild = nullptr;
     this->downChild = nullptr;
     this->rightChild = nullptr;
-    this->usedRule = -1;
+    this->usedEdge = nullptr;
+    for (int i = 0; i < 4; i++)
+        availableRules[i] = nullptr;
 }
 
 // Getters
@@ -99,9 +105,9 @@ TreeNode *TreeNode::getRightChild()
     return this->rightChild;
 }
 
-int TreeNode::getUsedRule()
+Edge *TreeNode::getUsedEdge()
 {
-    return this->usedRule;
+    return this->usedEdge;
 }
 
 Edge **TreeNode::getAvailableRules()
@@ -136,9 +142,9 @@ void TreeNode::setRightChild(TreeNode *node)
     this->rightChild = node;
 }
 
-void TreeNode::setUsedRule(int usedRule)
+void TreeNode::setUsedEdge(Edge *usedEdge)
 {
-    this->usedRule = usedRule;
+    this->usedEdge = usedEdge;
 }
 
 void TreeNode::setAvailableRules(Edge *rules[4])
