@@ -25,5 +25,5 @@ Abra o terminal e execute:<br/>
 
 ##### Visualizar
 
-Depois de ter executado o programa principal, certifique-se de voltar para o diretório onde o arquivo PNG foi gerado. Feito isso, você poderá visualizar o grafo executando:<br/>
+Depois de ter executado o programa principal, certifique-se de voltar para o diretório onde o arquivo `output.dot` foi gerado. Feito isso, você poderá visualizar o grafo executando:<br/>
 `dot -Kfdp -n -Tpng -o grafo.png output.dot`
