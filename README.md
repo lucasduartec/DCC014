@@ -14,7 +14,16 @@ Para compilar o projeto, esteja no diretório principal `maze` e execute a segui
 Para executar, digite no terminal:<br/>
 `./main`
 
-##### Visualizar o grafo
+##### Visualização do labirinto
 
-Para visualizar o grafo execute:<br/>
+Graphviz é um software para manipular e processar grafos open source. Os programas de layout Graphviz utilizam descrições de gráficos em uma linguagem de texto simples e projetam diagramas em formatos úteis.
+
+##### Instalação do visualizador
+
+Abra o terminal e execute:<br/>
+`sudo apt-get install graphviz`
+
+##### Visualizar
+
+Depois de ter executado o programa principal, certifique-se de voltar para o diretório onde o arquivo PNG foi gerado. Feito isso, você poderá visualizar o grafo executando:<br/>
 `dot -Kfdp -n -Tpng -o grafo.png output.dot`
