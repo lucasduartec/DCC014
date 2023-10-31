@@ -128,6 +128,34 @@ void sortArray(Edge *edges[], int numEdges)
     }
 }
 
+Edge **getAvailableRules(Node *currentMazeNode)
+{
+    // Vetor de regras possíveis aplicáveis
+    Edge **availableRules = new Edge *[4];
+
+    for (int i = 0; i < 4; i++)
+    {
+        availableRules[i] = nullptr;
+    }
+
+    Edge *edge = currentMazeNode->getFirstEdge();
+
+    int index = 0;
+
+    // Preenche vetor de regras com as arestas que saem daquele nó
+    while (edge != nullptr && index < 4)
+    {
+        availableRules[index] = edge;
+        index++;
+        edge = edge->getNextEdge();
+    }
+
+    // Ordena vetor de regras em ordem crescente (você deve implementar a função de ordenação)
+    sortArray(availableRules, 4);
+
+    return availableRules;
+}
+
 void Tree::backtrackingSearch(Graph *maze)
 {
     if (maze->getFirstNode() == nullptr)
@@ -144,24 +172,7 @@ void Tree::backtrackingSearch(Graph *maze)
 
     while (currentMazeNode->getTag() != "final")
     {
-
-        // Vetor de regras possíveis aplicáveis
-        Edge *availableRules[4] = {nullptr, nullptr, nullptr, nullptr};
-
-        Edge *edge = currentMazeNode->getFirstEdge();
-
-        int index = 0;
-
-        // Preenche vetor de regras com as arestas que saem daquele nó
-        while (edge != nullptr && index < 4)
-        {
-            availableRules[index] = edge;
-            index++;
-            edge = edge->getNextEdge();
-        }
-
-        // Ordena vetor de regras em ordem crescente
-        sortArray(availableRules, 4);
+        Edge **availableRules = getAvailableRules(currentMazeNode);
 
         currentState->setAvailableRules(availableRules);
 
@@ -191,7 +202,10 @@ void Tree::backtrackingSearch(Graph *maze)
                 availableRules[i] = nullptr;
 
                 // Seta regras disponíveis daquele novo nó
-                newTreeNode->setAvailableRules(availableRules);
+                currentState->setAvailableRules(availableRules);
+
+                // Marca a aresta utilizada para chegar até o novo nó
+                newTreeNode->setUsedEdge(chosenEdge);
 
                 cout << "Depois de usar a regra: " << endl;
                 cout << "Id do nó: " << currentMazeNode->getId() << endl;
@@ -202,8 +216,14 @@ void Tree::backtrackingSearch(Graph *maze)
                 }
                 cout << endl;
 
+                // Troca nó atual do grafo de acordo com a aresta tomada
                 currentMazeNode = maze->getNodeById(chosenEdge->getTargetId());
-                
+
+                // Troca nó atual da árvore
+                currentState = newTreeNode;
+
+                // Pŕoxima iteração
+                break;
             }
         }
     }

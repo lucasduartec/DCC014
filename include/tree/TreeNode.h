@@ -151,6 +151,8 @@ void TreeNode::setAvailableRules(Edge *rules[4])
 {
     for (int i = 0; i < 4; i++)
     {
+        if (rules[i] == usedEdge)
+            continue;
         availableRules[i] = rules[i];
     }
 }
