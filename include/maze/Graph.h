@@ -107,6 +107,23 @@ void Graph::insertEdge(Node *sourceNode, Node *targetNode, int direction)
         int sourceNodeId = sourceNode->getId();
         int targetNodeId = targetNode->getId();
         sourceNode->insertEdge(sourceNodeId, targetNodeId, direction);
+        switch (direction)
+        {
+        case 0:
+            direction = 2;
+            break;
+        case 1:
+            direction = 3;
+            break;
+        case 2:
+            direction = 0;
+            break;
+        case 3:
+            direction = 1;
+            break;
+        default:
+            break;
+        }
         targetNode->insertEdge(sourceNodeId, targetNodeId, direction);
         sourceNode->incrementDegree();
         targetNode->incrementDegree();
