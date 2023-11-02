@@ -263,6 +263,7 @@ void Graph::generateLittleMaze(){
     Node *node3 = this->insertNode("intermediario", "0,1");
     Node *node4 = this->insertNode("intermediario", "2,1");
     Node *node5 = this->insertNode("intermediario", "2,0");
+    Node *node7 = this->insertNode("intermediario", "0,2");
     Node *node6 = this->insertNode("final", "3,1");
 
     this->insertEdge(node0, node1, 1);
@@ -270,6 +271,8 @@ void Graph::generateLittleMaze(){
     this->insertEdge(node2, node3, 1);
     this->insertEdge(node2, node4, 3);
     this->insertEdge(node4, node5, 2);
+    this->insertEdge(node3, node7, 0);
     this->insertEdge(node4, node6, 3);
+   
 }
 #endif // GRAPH_H

@@ -27,7 +27,6 @@ public:
     void insertRoot(TreeNode *rootNode);
     void remove(TreeNode *node);
     void backtrackingSearch(Graph *maze);
-    void backtrackingSearchAux(Node *currentMazeNode, TreeNode *currentState, Graph *maze);
     void clearTree();
 };
 
@@ -128,38 +127,12 @@ void sortArray(Edge *edges[], int numEdges)
     }
 }
 
-Edge **getAvailableRules(Node *currentMazeNode)
-{
-    // Vetor de regras possíveis aplicáveis
-    Edge **availableRules = new Edge *[4];
-
-    for (int i = 0; i < 4; i++)
-    {
-        availableRules[i] = nullptr;
-    }
-
-    Edge *edge = currentMazeNode->getFirstEdge();
-
-    int index = 0;
-
-    // Preenche vetor de regras com as arestas que saem daquele nó
-    while (edge != nullptr && index < 4)
-    {
-        availableRules[index] = edge;
-        index++;
-        edge = edge->getNextEdge();
-    }
-
-    // Ordena vetor de regras em ordem crescente (você deve implementar a função de ordenação)
-    sortArray(availableRules, 4);
-
-    return availableRules;
-}
-
 Edge **getAvailableRules(Node *currentMazeNode, Edge *usedRule, TreeNode *currentState)
 {
     // Vetor de regras possíveis aplicáveis
     Edge **availableRules = new Edge *[4];
+
+    //Se o nó do labirinto não foi visitado ainda, é necessário setar as suas regras disponiveis
     if (!(currentMazeNode->getVisited()))
     {
         for (int i = 0; i < 4; i++)
@@ -191,7 +164,10 @@ Edge **getAvailableRules(Node *currentMazeNode, Edge *usedRule, TreeNode *curren
 
         // Ordena vetor de regras em ordem crescente (você deve implementar a função de ordenação)
         sortArray(availableRules, 4);
-    }else{
+    }
+    else
+    {
+        //Se o nó ja foi visitado, ele precisa apenas puxar de suas propriedades as regras disponiveis. 
         availableRules = currentState->getAvailableRules();
     }
     return availableRules;
@@ -219,7 +195,7 @@ void Tree::backtrackingSearch(Graph *maze)
 
         currentState->setAvailableRules(availableRules);
 
-        //nó puxou as regras, logo foi visitado
+        // nó puxou as regras, logo foi visitado
         currentMazeNode->setVisited();
 
         // Teste de impressão: direções das arestas do nó atual
@@ -232,6 +208,7 @@ void Tree::backtrackingSearch(Graph *maze)
         }
         cout << endl;
 
+        //contador para verificar se todas as regras são nulas, pois se forem é necessário retornar para o pai
         int count = 0;
 
         for (int i = 0; i < 4; i++)
@@ -267,7 +244,6 @@ void Tree::backtrackingSearch(Graph *maze)
                 // Troca nó atual do grafo de acordo com a aresta tomada
                 currentMazeNode = maze->getNodeById(chosenEdge->getTargetId());
 
-
                 // Troca nó atual da árvore
                 currentState = newTreeNode;
 
@@ -277,6 +253,7 @@ void Tree::backtrackingSearch(Graph *maze)
             else
                 count++;
         }
+        //Se contador == 4 quer dizer que não existe regra disponivel, logo é nescessário dar rollback 
         if (count == 4)
         {
             currentState = currentState->getFather();
@@ -284,9 +261,11 @@ void Tree::backtrackingSearch(Graph *maze)
         }
     }
 
-    if(currentMazeNode->getTag() == "final"){
-        cout << "FUNCIONOU!!!" << endl;
-    }
+    //Estado final encontrado
+    TreeNode *newTreeNode = new TreeNode(chosenEdge->getTargetId());
+    this->insert(currentState, newTreeNode, chosenEdge);
+    cout << "Estado Final Encontrado : " << newTreeNode->getId() << endl;
+    
 }
 
 #endif // TREE_H
