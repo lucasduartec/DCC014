@@ -156,6 +156,43 @@ Edge **getAvailableRules(Node *currentMazeNode)
     return availableRules;
 }
 
+Edge **getAvailableRules(Node *currentMazeNode, Edge *usedRule)
+{
+    // Vetor de regras possíveis aplicáveis
+    Edge **availableRules = new Edge *[4];
+
+    for (int i = 0; i < 4; i++)
+    {
+        availableRules[i] = nullptr;
+    }
+
+    Edge *edge = currentMazeNode->getFirstEdge();
+
+    int index = 0;
+
+    // Preenche vetor de regras com as arestas que saem daquele nó
+    while (edge != nullptr && index < 4)
+    {
+        if (usedRule != nullptr)
+        {
+            // evita que um nó possua uma aresta para onde veio
+            if (!((edge->getDirection() == 0 && usedRule->getDirection() == 2) || ((edge->getDirection() == 1 && usedRule->getDirection() == 3)) || ((edge->getDirection() == 2 && usedRule->getDirection() == 0)) || ((edge->getDirection() == 3 && usedRule->getDirection() == 1))))
+            {
+                availableRules[index] = edge;
+            }
+        }
+        else availableRules[index] = edge;
+
+        index++;
+        edge = edge->getNextEdge();
+    }
+
+    // Ordena vetor de regras em ordem crescente (você deve implementar a função de ordenação)
+    sortArray(availableRules, 4);
+
+    return availableRules;
+}
+
 void Tree::backtrackingSearch(Graph *maze)
 {
     if (maze->getFirstNode() == nullptr)
@@ -170,9 +207,11 @@ void Tree::backtrackingSearch(Graph *maze)
 
     insertRoot(currentState);
 
+    Edge *chosenEdge = nullptr;
+
     while (currentMazeNode->getTag() != "final")
     {
-        Edge **availableRules = getAvailableRules(currentMazeNode);
+        Edge **availableRules = getAvailableRules(currentMazeNode, chosenEdge);
 
         currentState->setAvailableRules(availableRules);
 
@@ -190,7 +229,7 @@ void Tree::backtrackingSearch(Graph *maze)
         {
             if (availableRules[i] != nullptr)
             {
-                Edge *chosenEdge = availableRules[i];
+                chosenEdge = availableRules[i];
 
                 // Cria novo nó cujo id é o nó destino daquela aresta no grafo
                 TreeNode *newTreeNode = new TreeNode(chosenEdge->getTargetId());
