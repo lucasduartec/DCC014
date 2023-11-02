@@ -20,9 +20,9 @@ private:
     Edge *lastEdge;
     int id;
     Node *nextNode;
-    unsigned int degree; // verificar se ele já tem o maximo de filhos (4)
-    string tag;          // inicial ou final
-    string position;     // posição para o graphviz
+    bool visited;
+    string tag;      // inicial ou final
+    string position; // posição para o graphviz
 
 public:
     // Constructor
@@ -35,16 +35,16 @@ public:
     Edge *getFirstEdge();
     Edge *getLastEdge();
     int getId() const;
-    int getDegree();
+    int getVisited();
     Node *getNextNode();
     string getTag();
     string getPosition();
 
     // Setters
     void setNextNode(Node *node);
+    void setVisited();
 
     // Other methods
-    void incrementDegree();
 
     // Manipulation methods
     void insertEdge(int sourceId, int targetId, int direction);
@@ -54,7 +54,7 @@ public:
 Node::Node(int id, string tag, string position)
 {
     this->id = id;
-    this->degree = 0;
+    this->visited = false;
     this->firstEdge = nullptr;
     this->nextNode = nullptr;
     this->tag = tag;
@@ -74,7 +74,7 @@ Node::~Node()
     }
 
     this->id = -1;
-    this->degree = 0;
+    this->visited = false;
     this->firstEdge = nullptr;
     this->nextNode = nullptr;
     this->tag = " ";
@@ -97,9 +97,9 @@ int Node::getId() const
     return this->id;
 }
 
-int Node::getDegree()
+int Node::getVisited()
 {
-    return this->degree;
+    return this->visited;
 }
 
 Node *Node::getNextNode()
@@ -119,9 +119,9 @@ void Node::setNextNode(Node *nextNode)
 }
 
 // Other Methods
-void Node::incrementDegree()
+void Node::setVisited()
 {
-    this->degree++;
+    this->visited = true;
 }
 
 void Node::insertEdge(int sourceId, int targetId, int direction)

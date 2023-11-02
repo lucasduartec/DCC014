@@ -156,40 +156,44 @@ Edge **getAvailableRules(Node *currentMazeNode)
     return availableRules;
 }
 
-Edge **getAvailableRules(Node *currentMazeNode, Edge *usedRule)
+Edge **getAvailableRules(Node *currentMazeNode, Edge *usedRule, TreeNode *currentState)
 {
     // Vetor de regras possíveis aplicáveis
     Edge **availableRules = new Edge *[4];
-
-    for (int i = 0; i < 4; i++)
+    if (!(currentMazeNode->getVisited()))
     {
-        availableRules[i] = nullptr;
-    }
-
-    Edge *edge = currentMazeNode->getFirstEdge();
-
-    int index = 0;
-
-    // Preenche vetor de regras com as arestas que saem daquele nó
-    while (edge != nullptr && index < 4)
-    {
-        if (usedRule != nullptr)
+        for (int i = 0; i < 4; i++)
         {
-            // evita que um nó possua uma aresta para onde veio
-            if (!((edge->getDirection() == 0 && usedRule->getDirection() == 2) || ((edge->getDirection() == 1 && usedRule->getDirection() == 3)) || ((edge->getDirection() == 2 && usedRule->getDirection() == 0)) || ((edge->getDirection() == 3 && usedRule->getDirection() == 1))))
-            {
-                availableRules[index] = edge;
-            }
+            availableRules[i] = nullptr;
         }
-        else availableRules[index] = edge;
 
-        index++;
-        edge = edge->getNextEdge();
+        Edge *edge = currentMazeNode->getFirstEdge();
+
+        int index = 0;
+
+        // Preenche vetor de regras com as arestas que saem daquele nó
+        while (edge != nullptr && index < 4)
+        {
+            if (usedRule != nullptr)
+            {
+                // evita que um nó possua uma aresta para onde veio
+                if (!((edge->getDirection() == 0 && usedRule->getDirection() == 2) || ((edge->getDirection() == 1 && usedRule->getDirection() == 3)) || ((edge->getDirection() == 2 && usedRule->getDirection() == 0)) || ((edge->getDirection() == 3 && usedRule->getDirection() == 1))))
+                {
+                    availableRules[index] = edge;
+                }
+            }
+            else
+                availableRules[index] = edge;
+
+            index++;
+            edge = edge->getNextEdge();
+        }
+
+        // Ordena vetor de regras em ordem crescente (você deve implementar a função de ordenação)
+        sortArray(availableRules, 4);
+    }else{
+        availableRules = currentState->getAvailableRules();
     }
-
-    // Ordena vetor de regras em ordem crescente (você deve implementar a função de ordenação)
-    sortArray(availableRules, 4);
-
     return availableRules;
 }
 
@@ -211,9 +215,12 @@ void Tree::backtrackingSearch(Graph *maze)
 
     while (currentMazeNode->getTag() != "final")
     {
-        Edge **availableRules = getAvailableRules(currentMazeNode, chosenEdge);
+        Edge **availableRules = getAvailableRules(currentMazeNode, chosenEdge, currentState);
 
         currentState->setAvailableRules(availableRules);
+
+        //nó puxou as regras, logo foi visitado
+        currentMazeNode->setVisited();
 
         // Teste de impressão: direções das arestas do nó atual
         cout << "Antes de usar a regra: " << endl;
@@ -224,6 +231,8 @@ void Tree::backtrackingSearch(Graph *maze)
                 cout << availableRules[i]->getDirection() << " ";
         }
         cout << endl;
+
+        int count = 0;
 
         for (int i = 0; i < 4; i++)
         {
@@ -258,13 +267,25 @@ void Tree::backtrackingSearch(Graph *maze)
                 // Troca nó atual do grafo de acordo com a aresta tomada
                 currentMazeNode = maze->getNodeById(chosenEdge->getTargetId());
 
+
                 // Troca nó atual da árvore
                 currentState = newTreeNode;
 
                 // Pŕoxima iteração
                 break;
             }
+            else
+                count++;
         }
+        if (count == 4)
+        {
+            currentState = currentState->getFather();
+            currentMazeNode = maze->getNodeById(currentState->getId());
+        }
+    }
+
+    if(currentMazeNode->getTag() == "final"){
+        cout << "FUNCIONOU!!!" << endl;
     }
 }
 

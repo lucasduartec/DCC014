@@ -41,6 +41,7 @@ public:
     void displayGraph();
 
     void generateMaze();
+    void generateLittleMaze();
 };
 
 // Construtor
@@ -125,8 +126,6 @@ void Graph::insertEdge(Node *sourceNode, Node *targetNode, int direction)
             break;
         }
         targetNode->insertEdge(sourceNodeId, targetNodeId, direction);
-        sourceNode->incrementDegree();
-        targetNode->incrementDegree();
     }
 }
 
@@ -257,4 +256,20 @@ void Graph::generateMaze()
     this->insertEdge(node38, node40, 3);
 }
 
+void Graph::generateLittleMaze(){
+    Node *node0 = this->insertNode("inicial", "2,2");
+    Node *node1 = this->insertNode("intermediario", "1,2");
+    Node *node2 = this->insertNode("intermediario", "1,1");
+    Node *node3 = this->insertNode("intermediario", "0,1");
+    Node *node4 = this->insertNode("intermediario", "2,1");
+    Node *node5 = this->insertNode("intermediario", "2,0");
+    Node *node6 = this->insertNode("final", "3,1");
+
+    this->insertEdge(node0, node1, 1);
+    this->insertEdge(node1, node2, 2);
+    this->insertEdge(node2, node3, 1);
+    this->insertEdge(node2, node4, 3);
+    this->insertEdge(node4, node5, 2);
+    this->insertEdge(node4, node6, 3);
+}
 #endif // GRAPH_H
