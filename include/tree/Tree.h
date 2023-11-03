@@ -198,17 +198,6 @@ stack<TreeNode *> Tree::backtrackingSearch(Graph *maze)
             // nó puxou as regras, logo foi visitado
             currentMazeNode->setVisited();
 
-            // // Teste de impressão: direções das arestas do nó atual
-            // cout << "Antes de usar a regra: " << endl;
-            // cout << "Id do nó: " << currentMazeNode->getId() << endl;
-
-            // for (int i = 0; i < 4; i++)
-            // {
-            //     if (availableRules[i] != nullptr)
-            //         cout << availableRules[i]->getDirection() << " ";
-            // }
-            // cout << endl;
-
             // contador para verificar se todas as regras são nulas, pois se forem é necessário retornar para o pai
             int count = 0;
 
@@ -232,16 +221,6 @@ stack<TreeNode *> Tree::backtrackingSearch(Graph *maze)
 
                     // Marca a aresta utilizada para chegar até o novo nó
                     newTreeNode->setUsedEdge(chosenEdge);
-
-                    // cout << "Depois de usar a regra: " << endl;
-                    // cout << "Id do nó: " << currentMazeNode->getId() << endl;
-
-                    // for (int i = 0; i < 4; i++)
-                    // {
-                    //     if (availableRules[i] != nullptr)
-                    //         cout << availableRules[i]->getDirection() << " ";
-                    // }
-                    // cout << endl;
 
                     // Troca nó atual do grafo de acordo com a aresta tomada
                     currentMazeNode = maze->getNodeById(chosenEdge->getTargetId());
