@@ -7,6 +7,7 @@
 #include "TreeNode.h"
 #include "Graph.h"
 #include <iostream>
+#include <stack>
 
 using namespace std;
 
@@ -26,7 +27,7 @@ public:
     void insert(TreeNode *currentState, TreeNode *newTreeNode, Edge *chosenEdge);
     void insertRoot(TreeNode *rootNode);
     void remove(TreeNode *node);
-    void backtrackingSearch(Graph *maze);
+    stack<TreeNode *> backtrackingSearch(Graph *maze);
     void clearTree();
 };
 
@@ -132,7 +133,7 @@ Edge **getAvailableRules(Node *currentMazeNode, Edge *usedRule, TreeNode *curren
     // Vetor de regras possíveis aplicáveis
     Edge **availableRules = new Edge *[4];
 
-    //Se o nó do labirinto não foi visitado ainda, é necessário setar as suas regras disponiveis
+    // Se o nó do labirinto não foi visitado ainda, é necessário setar as suas regras disponiveis
     if (!(currentMazeNode->getVisited()))
     {
         for (int i = 0; i < 4; i++)
@@ -167,105 +168,112 @@ Edge **getAvailableRules(Node *currentMazeNode, Edge *usedRule, TreeNode *curren
     }
     else
     {
-        //Se o nó ja foi visitado, ele precisa apenas puxar de suas propriedades as regras disponiveis. 
+        // Se o nó ja foi visitado, ele precisa apenas puxar de suas propriedades as regras disponiveis.
         availableRules = currentState->getAvailableRules();
     }
     return availableRules;
 }
 
-void Tree::backtrackingSearch(Graph *maze)
+stack<TreeNode *> Tree::backtrackingSearch(Graph *maze)
 {
-    if (maze->getFirstNode() == nullptr)
+    stack<TreeNode *> pilha;
+
+    if (maze->getFirstNode() != nullptr)
     {
-        return;
-    }
+        // pega id do primeiro nó do labirinto == estado inicial
+        Node *currentMazeNode = maze->getFirstNode();
 
-    // pega id do primeiro nó do labirinto == estado inicial
-    Node *currentMazeNode = maze->getFirstNode();
+        TreeNode *currentState = new TreeNode(currentMazeNode->getId());
 
-    TreeNode *currentState = new TreeNode(currentMazeNode->getId());
+        insertRoot(currentState);
 
-    insertRoot(currentState);
+        Edge *chosenEdge = nullptr;
 
-    Edge *chosenEdge = nullptr;
-
-    while (currentMazeNode->getTag() != "final")
-    {
-        Edge **availableRules = getAvailableRules(currentMazeNode, chosenEdge, currentState);
-
-        currentState->setAvailableRules(availableRules);
-
-        // nó puxou as regras, logo foi visitado
-        currentMazeNode->setVisited();
-
-        // Teste de impressão: direções das arestas do nó atual
-        cout << "Antes de usar a regra: " << endl;
-        cout << "Id do nó: " << currentMazeNode->getId() << endl;
-        for (int i = 0; i < 4; i++)
+        while (currentMazeNode->getTag() != "final")
         {
-            if (availableRules[i] != nullptr)
-                cout << availableRules[i]->getDirection() << " ";
-        }
-        cout << endl;
+            Edge **availableRules = getAvailableRules(currentMazeNode, chosenEdge, currentState);
 
-        //contador para verificar se todas as regras são nulas, pois se forem é necessário retornar para o pai
-        int count = 0;
+            currentState->setAvailableRules(availableRules);
 
-        for (int i = 0; i < 4; i++)
-        {
-            if (availableRules[i] != nullptr)
+            // nó puxou as regras, logo foi visitado
+            currentMazeNode->setVisited();
+
+            // // Teste de impressão: direções das arestas do nó atual
+            // cout << "Antes de usar a regra: " << endl;
+            // cout << "Id do nó: " << currentMazeNode->getId() << endl;
+
+            // for (int i = 0; i < 4; i++)
+            // {
+            //     if (availableRules[i] != nullptr)
+            //         cout << availableRules[i]->getDirection() << " ";
+            // }
+            // cout << endl;
+
+            // contador para verificar se todas as regras são nulas, pois se forem é necessário retornar para o pai
+            int count = 0;
+
+            for (int i = 0; i < 4; i++)
             {
-                chosenEdge = availableRules[i];
-
-                // Cria novo nó cujo id é o nó destino daquela aresta no grafo
-                TreeNode *newTreeNode = new TreeNode(chosenEdge->getTargetId());
-
-                // Insere novo nó na árvore
-                this->insert(currentState, newTreeNode, chosenEdge);
-
-                // Remove aquela regra da lista de possíveis
-                availableRules[i] = nullptr;
-
-                // Seta regras disponíveis daquele novo nó
-                currentState->setAvailableRules(availableRules);
-
-                // Marca a aresta utilizada para chegar até o novo nó
-                newTreeNode->setUsedEdge(chosenEdge);
-
-                cout << "Depois de usar a regra: " << endl;
-                cout << "Id do nó: " << currentMazeNode->getId() << endl;
-                for (int i = 0; i < 4; i++)
+                if (availableRules[i] != nullptr)
                 {
-                    if (availableRules[i] != nullptr)
-                        cout << availableRules[i]->getDirection() << " ";
+                    chosenEdge = availableRules[i];
+
+                    // Cria novo nó cujo id é o nó destino daquela aresta no grafo
+                    TreeNode *newTreeNode = new TreeNode(chosenEdge->getTargetId());
+
+                    // Insere novo nó na árvore
+                    this->insert(currentState, newTreeNode, chosenEdge);
+
+                    // Remove aquela regra da lista de possíveis
+                    availableRules[i] = nullptr;
+
+                    // Seta regras disponíveis daquele novo nó
+                    currentState->setAvailableRules(availableRules);
+
+                    // Marca a aresta utilizada para chegar até o novo nó
+                    newTreeNode->setUsedEdge(chosenEdge);
+
+                    // cout << "Depois de usar a regra: " << endl;
+                    // cout << "Id do nó: " << currentMazeNode->getId() << endl;
+
+                    // for (int i = 0; i < 4; i++)
+                    // {
+                    //     if (availableRules[i] != nullptr)
+                    //         cout << availableRules[i]->getDirection() << " ";
+                    // }
+                    // cout << endl;
+
+                    // Troca nó atual do grafo de acordo com a aresta tomada
+                    currentMazeNode = maze->getNodeById(chosenEdge->getTargetId());
+
+                    // Troca nó atual da árvore
+                    currentState = newTreeNode;
+
+                    // Pŕoxima iteração
+                    break;
                 }
-                cout << endl;
-
-                // Troca nó atual do grafo de acordo com a aresta tomada
-                currentMazeNode = maze->getNodeById(chosenEdge->getTargetId());
-
-                // Troca nó atual da árvore
-                currentState = newTreeNode;
-
-                // Pŕoxima iteração
-                break;
+                else
+                    count++;
             }
-            else
-                count++;
+            // Se contador == 4 quer dizer que não existe regra disponivel, logo é nescessário dar rollback
+            if (count == 4)
+            {
+                currentState = currentState->getFather();
+                currentMazeNode = maze->getNodeById(currentState->getId());
+            }
         }
-        //Se contador == 4 quer dizer que não existe regra disponivel, logo é nescessário dar rollback 
-        if (count == 4)
+
+        // coloca todos os nós da busca solução em uma pilha
+        while (currentState != this->root)
         {
+            pilha.push(currentState);
             currentState = currentState->getFather();
-            currentMazeNode = maze->getNodeById(currentState->getId());
         }
+        // add nó inicial
+        pilha.push(currentState);
     }
 
-    //Estado final encontrado
-    TreeNode *newTreeNode = new TreeNode(chosenEdge->getTargetId());
-    this->insert(currentState, newTreeNode, chosenEdge);
-    cout << "Estado Final Encontrado : " << newTreeNode->getId() << endl;
-    
+    return pilha;
 }
 
 #endif // TREE_H
