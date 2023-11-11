@@ -17,6 +17,7 @@ class Tree
     // attributes
 private:
     TreeNode *root;
+    void traverseAndPrint(TreeNode *node);
 
 public:
     // Constructor
@@ -31,6 +32,7 @@ public:
     stack<TreeNode *> backtrackingSearch(Graph *maze);
     stack<TreeNode *> breadthFirstSearch(Graph *maze);
     void clearTree();
+    void traverseAndPrint();
 };
 
 // Construtor
@@ -110,6 +112,28 @@ void Tree::remove(TreeNode *node)
 void Tree::clearTree()
 {
     this->root = nullptr;
+}
+
+void Tree::traverseAndPrint()
+{
+    if (root != nullptr)
+    {
+        traverseAndPrint(root);
+    }
+}
+
+void Tree::traverseAndPrint(TreeNode *node)
+{
+    if (node != nullptr)
+    {
+        cout << "Node ID: " << node->getId() << endl;
+
+        // Recursivamente chama a função para os filhos
+        traverseAndPrint(node->getTopChild());
+        traverseAndPrint(node->getLeftChild());
+        traverseAndPrint(node->getDownChild());
+        traverseAndPrint(node->getRightChild());
+    }
 }
 
 void sortArray(Edge *edges[], int numEdges)
@@ -261,7 +285,7 @@ stack<TreeNode *> Tree::breadthFirstSearch(Graph *maze)
 {
     stack<TreeNode *> pilha;
 
-    if (maze->getFirstNode() != nullptr)
+    if (maze->getFirstNode() == nullptr)
         return pilha;
 
     queue<TreeNode *> abertos;
@@ -273,9 +297,11 @@ stack<TreeNode *> Tree::breadthFirstSearch(Graph *maze)
 
     insertRoot(currentState);
 
+    abertos.push(currentState);
+
     Edge *chosenEdge = nullptr;
 
-    while (currentMazeNode->getTag() != "final")
+    while (!abertos.empty())
     {
         Edge **availableRules = getAvailableRules(currentMazeNode, chosenEdge, currentState);
 
@@ -311,11 +337,19 @@ stack<TreeNode *> Tree::breadthFirstSearch(Graph *maze)
 
         abertos.pop();
 
-        // Pega próximo nó da lista de abertos
-        currentMazeNode = maze->getNodeById(abertos.front()->getId());
+        if (!abertos.empty())
+        {
+            currentMazeNode = maze->getNodeById(abertos.front()->getId());
 
-        // Troca nó atual da árvore
-        currentState = abertos.front();
+            // Troca nó atual da árvore
+            currentState = abertos.front();
+        }
+        else
+        {
+            // Se a fila estiver vazia, encerra o loop
+            cout << "Fila vazia" << endl;
+            break;
+        }
     }
 
     // coloca todos os nós da busca solução em uma pilha
