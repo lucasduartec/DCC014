@@ -8,6 +8,7 @@
 #include "Graph.h"
 #include <iostream>
 #include <stack>
+#include <queue>
 
 using namespace std;
 
@@ -28,6 +29,7 @@ public:
     void insertRoot(TreeNode *rootNode);
     void remove(TreeNode *node);
     stack<TreeNode *> backtrackingSearch(Graph *maze);
+    stack<TreeNode *> breadthFirstSearch(Graph *maze);
     void clearTree();
 };
 
@@ -251,6 +253,79 @@ stack<TreeNode *> Tree::backtrackingSearch(Graph *maze)
         // add nó inicial
         pilha.push(currentState);
     }
+
+    return pilha;
+}
+
+stack<TreeNode *> Tree::breadthFirstSearch(Graph *maze)
+{
+    stack<TreeNode *> pilha;
+
+    if (maze->getFirstNode() != nullptr)
+        return pilha;
+
+    queue<TreeNode *> abertos;
+
+    // pega id do primeiro nó do labirinto == estado inicial
+    Node *currentMazeNode = maze->getFirstNode();
+
+    TreeNode *currentState = new TreeNode(currentMazeNode->getId());
+
+    insertRoot(currentState);
+
+    Edge *chosenEdge = nullptr;
+
+    while (currentMazeNode->getTag() != "final")
+    {
+        Edge **availableRules = getAvailableRules(currentMazeNode, chosenEdge, currentState);
+
+        currentState->setAvailableRules(availableRules);
+
+        // nó puxou as regras, logo foi visitado
+        currentMazeNode->setVisited();
+
+        for (int i = 0; i < 4; i++)
+        {
+            if (availableRules[i] != nullptr)
+            {
+                chosenEdge = availableRules[i];
+
+                // Cria novo nó cujo id é o nó destino daquela aresta no grafo
+                TreeNode *newTreeNode = new TreeNode(chosenEdge->getTargetId());
+
+                // Insere novo nó na árvore
+                this->insert(currentState, newTreeNode, chosenEdge);
+
+                // Remove aquela regra da lista de possíveis
+                availableRules[i] = nullptr;
+
+                // Seta regras disponíveis daquele novo nó
+                currentState->setAvailableRules(availableRules);
+
+                // Marca a aresta utilizada para chegar até o novo nó
+                newTreeNode->setUsedEdge(chosenEdge);
+
+                abertos.push(newTreeNode);
+            }
+        }
+
+        abertos.pop();
+
+        // Pega próximo nó da lista de abertos
+        currentMazeNode = maze->getNodeById(abertos.front()->getId());
+
+        // Troca nó atual da árvore
+        currentState = abertos.front();
+    }
+
+    // coloca todos os nós da busca solução em uma pilha
+    while (currentState != this->root)
+    {
+        pilha.push(currentState);
+        currentState = currentState->getFather();
+    }
+    // add nó inicial
+    pilha.push(currentState);
 
     return pilha;
 }

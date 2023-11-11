@@ -110,17 +110,22 @@ void writeGraphOnOutputFile(Graph *graph)
     }
 }
 
-void printSolution (stack<TreeNode*> pilha, string search){
+void printSolution(stack<TreeNode *> pilha, string search)
+{
 
     cout << search << " Search solution :" << endl;
 
-    while (!pilha.empty()) {
-        TreeNode* node = pilha.top(); 
-        pilha.pop();  
+    while (!pilha.empty())
+    {
+        TreeNode *node = pilha.top();
+        pilha.pop();
 
-        if(pilha.size() != 0){
+        if (pilha.size() != 0)
+        {
             cout << node->getId() << " -> ";
-        }else cout << node->getId() << " ";
+        }
+        else
+            cout << node->getId() << " ";
     }
 }
 
@@ -132,7 +137,7 @@ int main(int argc, char const *argv[])
     writeGraphOnOutputFile(maze);
 
     Tree *searchTree = new Tree();
-    stack<TreeNode*> solution = searchTree->backtrackingSearch(maze);
+    stack<TreeNode *> solution = searchTree->backtrackingSearch(maze);
 
     printSolution(solution, "Backtracking");
 
