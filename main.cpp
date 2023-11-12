@@ -88,10 +88,32 @@ string exportGraphToDotFormat(Graph *graph)
     return dot;
 }
 
-void writeGraphOnOutputFile(Graph *graph)
+string exportTreeToDotFormat(Tree *tree)
+{
+    if (tree == nullptr || tree->getRoot() == nullptr)
+        return "";
+
+    TreeNode *rootNode = tree->getRoot();
+    string dot = "digraph tree {\n";
+
+    // Traverse the tree and add nodes
+    tree->traverseAndPrint(rootNode, dot);
+
+    // Close the graph
+    dot += "}\n";
+
+    return dot;
+}
+
+void writeOutputFile(Graph *graph, Tree *searchTree, int option)
 {
     // Especifique o caminho completo para a pasta onde deseja salvar o arquivo "output.dot"
-    std::string outputPath = "../output.dot"; // Substitua pelo caminho desejado
+    std::string outputPath;
+
+    if (option == 0)
+        outputPath = "../graph.dot";
+    else
+        outputPath = "../tree.dot";
 
     // Abra o arquivo "output.dot" no caminho especificado e apague o conteúdo antigo
     std::ofstream outputFile(outputPath, std::ios::trunc);
@@ -99,7 +121,10 @@ void writeGraphOnOutputFile(Graph *graph)
     if (outputFile.is_open())
     {
         // Chame a função exportGraphToDotFormat e escreva o resultado no arquivo
-        outputFile << exportGraphToDotFormat(graph);
+        if (option == 0)
+            outputFile << exportGraphToDotFormat(graph);
+        else
+            outputFile << exportTreeToDotFormat(searchTree);
 
         // Feche o arquivo
         outputFile.close();
@@ -134,10 +159,11 @@ int main(int argc, char const *argv[])
     Graph *maze = new Graph();
     maze->generateLittleMaze();
 
-    writeGraphOnOutputFile(maze);
-
     Tree *searchTree = new Tree();
-    stack<TreeNode *> solution = searchTree->breadthFirstSearch(maze);
+    stack<TreeNode *> solution = searchTree->backtrackingSearch(maze);
+
+    writeOutputFile(maze, searchTree, 0);
+    writeOutputFile(maze, searchTree, 1);
 
     printSolution(solution, "Backtracking");
 

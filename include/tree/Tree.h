@@ -28,11 +28,13 @@ public:
 
     void insert(TreeNode *currentState, TreeNode *newTreeNode, Edge *chosenEdge);
     void insertRoot(TreeNode *rootNode);
+    TreeNode *getRoot();
     void remove(TreeNode *node);
     stack<TreeNode *> backtrackingSearch(Graph *maze);
     stack<TreeNode *> breadthFirstSearch(Graph *maze);
     void clearTree();
     void traverseAndPrint();
+    void traverseAndPrint(TreeNode *node, string &dot);
 };
 
 // Construtor
@@ -50,6 +52,37 @@ Tree::~Tree()
 void Tree::insertRoot(TreeNode *rootNode)
 {
     this->root = rootNode;
+}
+
+// Adicione este método à classe Tree
+void Tree::traverseAndPrint(TreeNode *node, string &dot)
+{
+    if (node == nullptr)
+        return;
+
+    // Print the current node
+    dot += "  " + to_string(node->getId()) + " [label=\"" + to_string(node->getId()) + "\"];\n";
+
+    // Recursively traverse children
+    traverseAndPrint(node->getTopChild(), dot);
+    traverseAndPrint(node->getLeftChild(), dot);
+    traverseAndPrint(node->getDownChild(), dot);
+    traverseAndPrint(node->getRightChild(), dot);
+
+    // Print edges
+    if (node->getTopChild() != nullptr)
+        dot += "  " + to_string(node->getId()) + " -> " + to_string(node->getTopChild()->getId()) + ";\n";
+    if (node->getLeftChild() != nullptr)
+        dot += "  " + to_string(node->getId()) + " -> " + to_string(node->getLeftChild()->getId()) + ";\n";
+    if (node->getDownChild() != nullptr)
+        dot += "  " + to_string(node->getId()) + " -> " + to_string(node->getDownChild()->getId()) + ";\n";
+    if (node->getRightChild() != nullptr)
+        dot += "  " + to_string(node->getId()) + " -> " + to_string(node->getRightChild()->getId()) + ";\n";
+}
+
+TreeNode *Tree::getRoot()
+{
+    return this->root;
 }
 
 void Tree::insert(TreeNode *currentState, TreeNode *newTreeNode, Edge *chosenEdge)
@@ -290,7 +323,7 @@ stack<TreeNode *> Tree::breadthFirstSearch(Graph *maze)
 
     queue<TreeNode *> abertos;
 
-    // pega id do primeiro nó do labirinto == estado inicial
+    // Pega o ID do primeiro nó do labirinto == estado inicial
     Node *currentMazeNode = maze->getFirstNode();
 
     TreeNode *currentState = new TreeNode(currentMazeNode->getId());
@@ -299,16 +332,19 @@ stack<TreeNode *> Tree::breadthFirstSearch(Graph *maze)
 
     abertos.push(currentState);
 
-    Edge *chosenEdge = nullptr;
-
     while (!abertos.empty())
     {
-        Edge **availableRules = getAvailableRules(currentMazeNode, chosenEdge, currentState);
+        TreeNode *currentNode = abertos.front();
+        abertos.pop();
 
-        currentState->setAvailableRules(availableRules);
+        Edge **availableRules = getAvailableRules(currentMazeNode, nullptr, currentState);
 
-        // nó puxou as regras, logo foi visitado
+        currentNode->setAvailableRules(availableRules);
+
+        // Nó atual foi visitado
         currentMazeNode->setVisited();
+
+        Edge *chosenEdge = nullptr;
 
         for (int i = 0; i < 4; i++)
         {
@@ -316,17 +352,17 @@ stack<TreeNode *> Tree::breadthFirstSearch(Graph *maze)
             {
                 chosenEdge = availableRules[i];
 
-                // Cria novo nó cujo id é o nó destino daquela aresta no grafo
+                // Cria novo nó cujo ID é o nó destino daquela aresta no grafo
                 TreeNode *newTreeNode = new TreeNode(chosenEdge->getTargetId());
 
                 // Insere novo nó na árvore
-                this->insert(currentState, newTreeNode, chosenEdge);
+                this->insert(currentNode, newTreeNode, chosenEdge);
 
                 // Remove aquela regra da lista de possíveis
                 availableRules[i] = nullptr;
 
                 // Seta regras disponíveis daquele novo nó
-                currentState->setAvailableRules(availableRules);
+                newTreeNode->setAvailableRules(availableRules);
 
                 // Marca a aresta utilizada para chegar até o novo nó
                 newTreeNode->setUsedEdge(chosenEdge);
@@ -335,30 +371,17 @@ stack<TreeNode *> Tree::breadthFirstSearch(Graph *maze)
             }
         }
 
-        abertos.pop();
-
-        if (!abertos.empty())
-        {
-            currentMazeNode = maze->getNodeById(abertos.front()->getId());
-
-            // Troca nó atual da árvore
-            currentState = abertos.front();
-        }
-        else
-        {
-            // Se a fila estiver vazia, encerra o loop
-            cout << "Fila vazia" << endl;
-            break;
-        }
+        // Atualiza o nó atual
+        currentMazeNode = maze->getNodeById(currentNode->getId());
     }
 
-    // coloca todos os nós da busca solução em uma pilha
-    while (currentState != this->root)
+    // Coloca todos os nós da busca solução em uma pilha
+    while (currentState != this->getRoot())
     {
         pilha.push(currentState);
         currentState = currentState->getFather();
     }
-    // add nó inicial
+    // Adiciona o nó inicial
     pilha.push(currentState);
 
     return pilha;
