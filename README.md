@@ -2,6 +2,11 @@
 
 Implementação do trabalho da disciplina DCC014 - Inteligência Artificial durante o período 2023.3 na Universidade Federal de Juiz de Fora.
 
+##### Execução (via script)
+
+Certifique-se de que está no diretório raíz do projeto e execute o script com o comando:
+`./scripts/run.sh`
+
 ##### Compilação
 
 Para compilar o projeto, esteja no diretório principal `maze` e execute a seguinte sequência de comandos no terminal:<br/>
