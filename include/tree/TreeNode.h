@@ -29,6 +29,11 @@ private:
     // Regras disponíveis aplicáveis a partir daquele nó
     Edge *availableRules[4];
 
+    // Atributo para saber se o nó realizou backtracking
+    bool backtracked;
+
+    bool final;
+
 public:
     // Construtor
     TreeNode(int id);
@@ -46,6 +51,8 @@ public:
     TreeNode *getRightChild();
     Edge *getUsedEdge();
     Edge **getAvailableRules();
+    bool getBacktracked();
+    bool isFinal();
 
     // Setters
     void setFather(TreeNode *node);
@@ -55,15 +62,19 @@ public:
     void setRightChild(TreeNode *node);
     void setUsedEdge(Edge *usedEdge);
     void setAvailableRules(Edge *rules[4]);
+    void setBacktracked(bool backtracked);
+    void setFinal();
 };
 
 // Construtor
 TreeNode::TreeNode(int id)
 {
     this->id = id;
-    this->usedEdge = nullptr; 
+    this->usedEdge = nullptr;
     for (int i = 0; i < 4; i++)
         availableRules[i] = nullptr;
+
+    this->backtracked = false;
 }
 
 // Destrutor
@@ -76,6 +87,7 @@ TreeNode::~TreeNode()
     this->downChild = nullptr;
     this->rightChild = nullptr;
     this->usedEdge = nullptr;
+    this->backtracked = false;
     for (int i = 0; i < 4; i++)
         availableRules[i] = nullptr;
 }
@@ -114,6 +126,16 @@ Edge *TreeNode::getUsedEdge()
 Edge **TreeNode::getAvailableRules()
 {
     return availableRules;
+}
+
+bool TreeNode::getBacktracked()
+{
+    return this->backtracked;
+}
+
+bool TreeNode::isFinal()
+{
+    return this->final;
 }
 
 // Setters
@@ -156,6 +178,16 @@ void TreeNode::setAvailableRules(Edge *rules[4])
             continue;
         availableRules[i] = rules[i];
     }
+}
+
+void TreeNode::setBacktracked(bool backtracked)
+{
+    this->backtracked = backtracked;
+}
+
+void TreeNode::setFinal()
+{
+    this->final = true;
 }
 
 #endif // TREENODE_H

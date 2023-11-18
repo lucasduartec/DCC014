@@ -17,7 +17,6 @@ class Tree
     // attributes
 private:
     TreeNode *root;
-    void traverseAndPrint(TreeNode *node);
 
 public:
     // Constructor
@@ -32,7 +31,6 @@ public:
     TreeNode *getRoot();
     void remove(TreeNode *node);
     void clearTree();
-    void traverseAndPrint();
     void traverseAndPrint(TreeNode *node, string &dot);
 
     // Searches
@@ -57,14 +55,19 @@ void Tree::insertRoot(TreeNode *rootNode)
     this->root = rootNode;
 }
 
-// Adicione este método à classe Tree
 void Tree::traverseAndPrint(TreeNode *node, string &dot)
 {
     if (node == nullptr)
         return;
 
     // Print the current node
-    dot += "  " + to_string(node->getId()) + " [label=\"" + to_string(node->getId()) + "\"];\n";
+
+    dot += "  " + to_string(node->getId()) + " [label=\"" + to_string(node->getId()) + "\"";
+
+    if (node->isFinal())
+        dot += ", color = green];\n";
+    else
+        dot += "];\n";
 
     // Recursively traverse children
     traverseAndPrint(node->getTopChild(), dot);
@@ -74,13 +77,20 @@ void Tree::traverseAndPrint(TreeNode *node, string &dot)
 
     // Print edges
     if (node->getTopChild() != nullptr)
-        dot += "  " + to_string(node->getId()) + " -> " + to_string(node->getTopChild()->getId()) + ";\n";
+        dot += "  " + to_string(node->getId()) + " -> " + to_string(node->getTopChild()->getId()) + " [label=\"" + to_string(node->getTopChild()->getUsedEdge()->getDirection()) + "\"];\n";
     if (node->getLeftChild() != nullptr)
-        dot += "  " + to_string(node->getId()) + " -> " + to_string(node->getLeftChild()->getId()) + ";\n";
+        dot += "  " + to_string(node->getId()) + " -> " + to_string(node->getLeftChild()->getId()) + " [label=\"" + to_string(node->getLeftChild()->getUsedEdge()->getDirection()) + "\"];\n";
     if (node->getDownChild() != nullptr)
-        dot += "  " + to_string(node->getId()) + " -> " + to_string(node->getDownChild()->getId()) + ";\n";
+        dot += "  " + to_string(node->getId()) + " -> " + to_string(node->getDownChild()->getId()) + " [label=\"" + to_string(node->getDownChild()->getUsedEdge()->getDirection()) + "\"];\n";
     if (node->getRightChild() != nullptr)
-        dot += "  " + to_string(node->getId()) + " -> " + to_string(node->getRightChild()->getId()) + ";\n";
+        dot += "  " + to_string(node->getId()) + " -> " + to_string(node->getRightChild()->getId()) + " [label=\"" + to_string(node->getRightChild()->getUsedEdge()->getDirection()) + "\"];\n";
+
+    if (node->getBacktracked())
+    {
+        TreeNode *father = node->getFather();
+        if (father != nullptr)
+            dot += "  " + to_string(node->getId()) + " -> " + to_string(father->getId()) + " [label=\"backtracked\"];\n";
+    }
 }
 
 TreeNode *Tree::getRoot()
@@ -148,28 +158,6 @@ void Tree::remove(TreeNode *node)
 void Tree::clearTree()
 {
     this->root = nullptr;
-}
-
-void Tree::traverseAndPrint()
-{
-    if (root != nullptr)
-    {
-        traverseAndPrint(root);
-    }
-}
-
-void Tree::traverseAndPrint(TreeNode *node)
-{
-    if (node != nullptr)
-    {
-        cout << "Node ID: " << node->getId() << endl;
-
-        // Recursivamente chama a função para os filhos
-        traverseAndPrint(node->getTopChild());
-        traverseAndPrint(node->getLeftChild());
-        traverseAndPrint(node->getDownChild());
-        traverseAndPrint(node->getRightChild());
-    }
 }
 
 void sortArray(Edge *edges[], int numEdges)
@@ -302,10 +290,13 @@ stack<TreeNode *> Tree::backtrackingSearch(Graph *maze)
         // Se contador == 4 quer dizer que não existe regra disponivel, logo é nescessário dar rollback
         if (count == 4)
         {
+            currentState->setBacktracked(true);
             currentState = currentState->getFather();
             currentMazeNode = maze->getNodeById(currentState->getId());
         }
     }
+
+    currentState->setFinal();
 
     // coloca todos os nós da busca solução em uma pilha
     while (currentState != this->root)
