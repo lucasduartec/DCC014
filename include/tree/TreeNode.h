@@ -61,6 +61,7 @@ public:
 TreeNode::TreeNode(int id)
 {
     this->id = id;
+    this->usedEdge = nullptr; 
     for (int i = 0; i < 4; i++)
         availableRules[i] = nullptr;
 }

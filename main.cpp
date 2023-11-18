@@ -157,15 +157,15 @@ void printSolution(stack<TreeNode *> pilha, string search)
 int main(int argc, char const *argv[])
 {
     Graph *maze = new Graph();
-    maze->generateLittleMaze();
+    maze->generateMaze();
 
     Tree *searchTree = new Tree();
-    stack<TreeNode *> solution = searchTree->backtrackingSearch(maze);
+    stack<TreeNode *> solution = searchTree->breadthFirstSearch(maze);
 
     writeOutputFile(maze, searchTree, 0);
     writeOutputFile(maze, searchTree, 1);
 
-    printSolution(solution, "Backtracking");
+    printSolution(solution, "breadthFirstSearch");
 
     // searchTree->traverseAndPrint();
 

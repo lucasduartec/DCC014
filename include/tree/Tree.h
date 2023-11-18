@@ -192,6 +192,8 @@ Edge **getAvailableRules(Node *currentMazeNode, Edge *usedRule, TreeNode *curren
     // Vetor de regras possíveis aplicáveis
     Edge **availableRules = new Edge *[4];
 
+    usedRule = currentState->getUsedEdge();
+
     // Se o nó do labirinto não foi visitado ainda, é necessário setar as suas regras disponiveis
     if (!(currentMazeNode->getVisited()))
     {
@@ -364,10 +366,7 @@ stack<TreeNode *> Tree::breadthFirstSearch(Graph *maze)
 
                 // Troca nó atual do grafo de acordo com a aresta tomada
                 currentMazeNode = maze->getNodeById(chosenEdge->getTargetId());
-
-                // Troca nó atual da árvore
-                currentState = newTreeNode;
-
+                
                 abertos.push(newTreeNode);
             }
         }
