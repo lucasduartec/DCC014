@@ -94,7 +94,7 @@ string exportTreeToDotFormat(Tree *tree)
         return "";
 
     TreeNode *rootNode = tree->getRoot();
-    string dot = "digraph tree {\n";
+    string dot = "strict digraph tree {\nrankdir=TB;\n";
 
     // Traverse the tree and add nodes
     tree->traverseAndPrint(rootNode, dot);
@@ -160,7 +160,7 @@ int main(int argc, char const *argv[])
     maze->generateMaze();
 
     Tree *searchTree = new Tree();
-    stack<TreeNode *> solution = searchTree->breadthFirstSearch(maze);
+    stack<TreeNode *> solution = searchTree->backtrackingSearch(maze);
 
     writeOutputFile(maze, searchTree, 0);
     writeOutputFile(maze, searchTree, 1);
