@@ -26,17 +26,20 @@ public:
     // Destructor
     ~Tree();
 
+    // Operations
     void insert(TreeNode *currentState, TreeNode *newTreeNode, Edge *chosenEdge);
     void insertRoot(TreeNode *rootNode);
     TreeNode *getRoot();
     void remove(TreeNode *node);
-    stack<TreeNode *> backtrackingSearch(Graph *maze);
-    stack<TreeNode *> breadthFirstSearch(Graph *maze);
     void clearTree();
     void traverseAndPrint();
     void traverseAndPrint(TreeNode *node, string &dot);
-};
 
+    // Searches
+    stack<TreeNode *> backtrackingSearch(Graph *maze);
+    stack<TreeNode *> breadthFirstSearch(Graph *maze);
+    stack<TreeNode *> depthFirstSearch(Graph *maze);
+};
 // Construtor
 Tree::Tree()
 {
@@ -187,12 +190,12 @@ void sortArray(Edge *edges[], int numEdges)
     }
 }
 
-Edge **getAvailableRules(Node *currentMazeNode, Edge *usedRule, TreeNode *currentState)
+Edge **getAvailableRules(Node *currentMazeNode, TreeNode *currentState)
 {
     // Vetor de regras possíveis aplicáveis
     Edge **availableRules = new Edge *[4];
 
-    usedRule = currentState->getUsedEdge();
+    Edge *usedRule = currentState->getUsedEdge();
 
     // Se o nó do labirinto não foi visitado ainda, é necessário setar as suas regras disponiveis
     if (!(currentMazeNode->getVisited()))
@@ -253,7 +256,7 @@ stack<TreeNode *> Tree::backtrackingSearch(Graph *maze)
 
     while (currentMazeNode->getTag() != "final")
     {
-        Edge **availableRules = getAvailableRules(currentMazeNode, chosenEdge, currentState);
+        Edge **availableRules = getAvailableRules(currentMazeNode, currentState);
 
         currentState->setAvailableRules(availableRules);
 
@@ -336,7 +339,7 @@ stack<TreeNode *> Tree::breadthFirstSearch(Graph *maze)
 
     while (currentMazeNode->getTag() != "final")
     {
-        Edge **availableRules = getAvailableRules(currentMazeNode, chosenEdge, currentState);
+        Edge **availableRules = getAvailableRules(currentMazeNode, currentState);
 
         currentState->setAvailableRules(availableRules);
 
@@ -366,11 +369,82 @@ stack<TreeNode *> Tree::breadthFirstSearch(Graph *maze)
 
                 // Troca nó atual do grafo de acordo com a aresta tomada
                 currentMazeNode = maze->getNodeById(chosenEdge->getTargetId());
-                
+
                 abertos.push(newTreeNode);
             }
         }
         currentState = abertos.front();
+        abertos.pop();
+        currentMazeNode = maze->getNodeById(currentState->getId());
+    }
+
+    // coloca todos os nós da busca solução em uma pilha
+    while (currentState != this->root)
+    {
+        pilha.push(currentState);
+        currentState = currentState->getFather();
+    }
+    // add nó inicial
+    pilha.push(currentState);
+
+    return pilha;
+}
+
+stack<TreeNode *> Tree::depthFirstSearch(Graph *maze)
+{
+    stack<TreeNode *> pilha;
+
+    if (maze->getFirstNode() == nullptr)
+        return pilha;
+
+    // pega id do primeiro nó do labirinto == estado inicial
+    Node *currentMazeNode = maze->getFirstNode();
+
+    TreeNode *currentState = new TreeNode(currentMazeNode->getId());
+
+    insertRoot(currentState);
+
+    stack<TreeNode *> abertos;
+
+    Edge *chosenEdge = nullptr;
+
+    while (currentMazeNode->getTag() != "final")
+    {
+        Edge **availableRules = getAvailableRules(currentMazeNode, currentState);
+
+        currentState->setAvailableRules(availableRules);
+
+        // nó puxou as regras, logo foi visitado
+        currentMazeNode->setVisited();
+
+        for (int i = 0; i < 4; i++)
+        {
+            if (availableRules[i] != nullptr)
+            {
+                chosenEdge = availableRules[i];
+
+                // Cria novo nó cujo id é o nó destino daquela aresta no grafo
+                TreeNode *newTreeNode = new TreeNode(chosenEdge->getTargetId());
+
+                // Insere novo nó na árvore
+                this->insert(currentState, newTreeNode, chosenEdge);
+
+                // Remove aquela regra da lista de possíveis
+                availableRules[i] = nullptr;
+
+                // Seta regras disponíveis daquele novo nó
+                currentState->setAvailableRules(availableRules);
+
+                // Marca a aresta utilizada para chegar até o novo nó
+                newTreeNode->setUsedEdge(chosenEdge);
+
+                // Troca nó atual do grafo de acordo com a aresta tomada
+                currentMazeNode = maze->getNodeById(chosenEdge->getTargetId());
+
+                abertos.push(newTreeNode);
+            }
+        }
+        currentState = abertos.top();
         abertos.pop();
         currentMazeNode = maze->getNodeById(currentState->getId());
     }
