@@ -237,79 +237,79 @@ stack<TreeNode *> Tree::backtrackingSearch(Graph *maze)
 {
     stack<TreeNode *> pilha;
 
-    if (maze->getFirstNode() != nullptr)
+    if (maze->getFirstNode() == nullptr)
+        return pilha;
+
+    // pega id do primeiro nó do labirinto == estado inicial
+    Node *currentMazeNode = maze->getFirstNode();
+
+    TreeNode *currentState = new TreeNode(currentMazeNode->getId());
+
+    insertRoot(currentState);
+
+    Edge *chosenEdge = nullptr;
+
+    while (currentMazeNode->getTag() != "final")
     {
-        // pega id do primeiro nó do labirinto == estado inicial
-        Node *currentMazeNode = maze->getFirstNode();
+        Edge **availableRules = getAvailableRules(currentMazeNode, chosenEdge, currentState);
 
-        TreeNode *currentState = new TreeNode(currentMazeNode->getId());
+        currentState->setAvailableRules(availableRules);
 
-        insertRoot(currentState);
+        // nó puxou as regras, logo foi visitado
+        currentMazeNode->setVisited();
 
-        Edge *chosenEdge = nullptr;
+        // contador para verificar se todas as regras são nulas, pois se forem é necessário retornar para o pai
+        int count = 0;
 
-        while (currentMazeNode->getTag() != "final")
+        for (int i = 0; i < 4; i++)
         {
-            Edge **availableRules = getAvailableRules(currentMazeNode, chosenEdge, currentState);
-
-            currentState->setAvailableRules(availableRules);
-
-            // nó puxou as regras, logo foi visitado
-            currentMazeNode->setVisited();
-
-            // contador para verificar se todas as regras são nulas, pois se forem é necessário retornar para o pai
-            int count = 0;
-
-            for (int i = 0; i < 4; i++)
+            if (availableRules[i] != nullptr)
             {
-                if (availableRules[i] != nullptr)
-                {
-                    chosenEdge = availableRules[i];
+                chosenEdge = availableRules[i];
 
-                    // Cria novo nó cujo id é o nó destino daquela aresta no grafo
-                    TreeNode *newTreeNode = new TreeNode(chosenEdge->getTargetId());
+                // Cria novo nó cujo id é o nó destino daquela aresta no grafo
+                TreeNode *newTreeNode = new TreeNode(chosenEdge->getTargetId());
 
-                    // Insere novo nó na árvore
-                    this->insert(currentState, newTreeNode, chosenEdge);
+                // Insere novo nó na árvore
+                this->insert(currentState, newTreeNode, chosenEdge);
 
-                    // Remove aquela regra da lista de possíveis
-                    availableRules[i] = nullptr;
+                // Remove aquela regra da lista de possíveis
+                availableRules[i] = nullptr;
 
-                    // Seta regras disponíveis daquele novo nó
-                    currentState->setAvailableRules(availableRules);
+                // Seta regras disponíveis daquele novo nó
+                currentState->setAvailableRules(availableRules);
 
-                    // Marca a aresta utilizada para chegar até o novo nó
-                    newTreeNode->setUsedEdge(chosenEdge);
+                // Marca a aresta utilizada para chegar até o novo nó
+                newTreeNode->setUsedEdge(chosenEdge);
 
-                    // Troca nó atual do grafo de acordo com a aresta tomada
-                    currentMazeNode = maze->getNodeById(chosenEdge->getTargetId());
+                // Troca nó atual do grafo de acordo com a aresta tomada
+                currentMazeNode = maze->getNodeById(chosenEdge->getTargetId());
 
-                    // Troca nó atual da árvore
-                    currentState = newTreeNode;
+                // Troca nó atual da árvore
+                currentState = newTreeNode;
 
-                    // Pŕoxima iteração
-                    break;
-                }
-                else
-                    count++;
+                // Pŕoxima iteração
+                break;
             }
-            // Se contador == 4 quer dizer que não existe regra disponivel, logo é nescessário dar rollback
-            if (count == 4)
-            {
-                currentState = currentState->getFather();
-                currentMazeNode = maze->getNodeById(currentState->getId());
-            }
+            else
+                count++;
         }
-
-        // coloca todos os nós da busca solução em uma pilha
-        while (currentState != this->root)
+        // Se contador == 4 quer dizer que não existe regra disponivel, logo é nescessário dar rollback
+        if (count == 4)
         {
-            pilha.push(currentState);
             currentState = currentState->getFather();
+            currentMazeNode = maze->getNodeById(currentState->getId());
         }
-        // add nó inicial
-        pilha.push(currentState);
     }
+
+    // coloca todos os nós da busca solução em uma pilha
+    while (currentState != this->root)
+    {
+        pilha.push(currentState);
+        currentState = currentState->getFather();
+    }
+    // add nó inicial
+    pilha.push(currentState);
 
     return pilha;
 }
@@ -321,30 +321,25 @@ stack<TreeNode *> Tree::breadthFirstSearch(Graph *maze)
     if (maze->getFirstNode() == nullptr)
         return pilha;
 
-    queue<TreeNode *> abertos;
-
-    // Pega o ID do primeiro nó do labirinto == estado inicial
+    // pega id do primeiro nó do labirinto == estado inicial
     Node *currentMazeNode = maze->getFirstNode();
 
     TreeNode *currentState = new TreeNode(currentMazeNode->getId());
 
     insertRoot(currentState);
 
-    abertos.push(currentState);
+    queue<TreeNode *> abertos;
 
-    while (!abertos.empty())
+    Edge *chosenEdge = nullptr;
+
+    while (currentMazeNode->getTag() != "final")
     {
-        TreeNode *currentNode = abertos.front();
-        abertos.pop();
+        Edge **availableRules = getAvailableRules(currentMazeNode, chosenEdge, currentState);
 
-        Edge **availableRules = getAvailableRules(currentMazeNode, nullptr, currentState);
+        currentState->setAvailableRules(availableRules);
 
-        currentNode->setAvailableRules(availableRules);
-
-        // Nó atual foi visitado
+        // nó puxou as regras, logo foi visitado
         currentMazeNode->setVisited();
-
-        Edge *chosenEdge = nullptr;
 
         for (int i = 0; i < 4; i++)
         {
@@ -352,36 +347,42 @@ stack<TreeNode *> Tree::breadthFirstSearch(Graph *maze)
             {
                 chosenEdge = availableRules[i];
 
-                // Cria novo nó cujo ID é o nó destino daquela aresta no grafo
+                // Cria novo nó cujo id é o nó destino daquela aresta no grafo
                 TreeNode *newTreeNode = new TreeNode(chosenEdge->getTargetId());
 
                 // Insere novo nó na árvore
-                this->insert(currentNode, newTreeNode, chosenEdge);
+                this->insert(currentState, newTreeNode, chosenEdge);
 
                 // Remove aquela regra da lista de possíveis
                 availableRules[i] = nullptr;
 
                 // Seta regras disponíveis daquele novo nó
-                newTreeNode->setAvailableRules(availableRules);
+                currentState->setAvailableRules(availableRules);
 
                 // Marca a aresta utilizada para chegar até o novo nó
                 newTreeNode->setUsedEdge(chosenEdge);
 
+                // Troca nó atual do grafo de acordo com a aresta tomada
+                currentMazeNode = maze->getNodeById(chosenEdge->getTargetId());
+
+                // Troca nó atual da árvore
+                currentState = newTreeNode;
+
                 abertos.push(newTreeNode);
             }
         }
-
-        // Atualiza o nó atual
-        currentMazeNode = maze->getNodeById(currentNode->getId());
+        currentState = abertos.front();
+        abertos.pop();
+        currentMazeNode = maze->getNodeById(currentState->getId());
     }
 
-    // Coloca todos os nós da busca solução em uma pilha
-    while (currentState != this->getRoot())
+    // coloca todos os nós da busca solução em uma pilha
+    while (currentState != this->root)
     {
         pilha.push(currentState);
         currentState = currentState->getFather();
     }
-    // Adiciona o nó inicial
+    // add nó inicial
     pilha.push(currentState);
 
     return pilha;
