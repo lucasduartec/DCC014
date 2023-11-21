@@ -11,11 +11,11 @@ Visando auxiliar a visualização do problema e suas respectivas soluções foi 
 Abra o terminal no seu computador e execute:<br/>
 `sudo apt-get install graphviz`
 
-##### Execução (via script)
+##### Execução
 
 Para auxiliar na compilação do projeto, foi utilizada a ferramenta **cmake**. Você pode instalá-lo da seguinte forma:<br/>
 `sudo apt-get -y install cmake`
 
 Depois de ter instalado o **Graphviz** e o **cmake**, o sistema estará apto para executar o programa.
-Certifique-se de que está no diretório raíz do projeto e execute o script com o comando:<br/>
+Certifique-se de que está no diretório raíz do projeto. Primeiro crie a pasta usada para **build** com `mkdir build` e depois já poderá rodar o programa com o script:<br/>
 `./scripts/run.sh`
