@@ -37,6 +37,7 @@ public:
     stack<TreeNode *> backtrackingSearch(Graph *maze);
     stack<TreeNode *> breadthFirstSearch(Graph *maze);
     stack<TreeNode *> depthFirstSearch(Graph *maze);
+    stack<TreeNode *> greedySearch(Graph *maze);
 };
 // Construtor
 Tree::Tree()
@@ -451,5 +452,155 @@ stack<TreeNode *> Tree::depthFirstSearch(Graph *maze)
 
     return pilha;
 }
+
+void printAvailableRules(Edge **availableRules)
+{
+    cout << "Available Rules: ";
+    for (int i = 0; i < 4; i++)
+    {
+        if (availableRules[i] != nullptr)
+        {
+            cout << "[" << availableRules[i]->getSourceId() << " - " << availableRules[i]->getTargetId() << "] ";
+        }
+    }
+    cout << endl;
+}
+
+void orderByHeuristic(Edge **availableRules, Graph *maze)
+{
+
+    // Bubble sort
+    for (int i = 0; i < 4; i++)
+    {
+      for (int j = 0; j < 4 - i - 1; j++)
+      {
+        if (availableRules[j] != nullptr && availableRules[j + 1] != nullptr &&
+          maze->getNodeById(availableRules[j]->getTargetId())->getHeuristic() < maze->getNodeById(availableRules[j + 1]->getTargetId())->getHeuristic())
+        {
+          Edge *temp = availableRules[j];
+          availableRules[j] = availableRules[j + 1];
+          availableRules[j + 1] = temp;
+        }
+      }
+    }
+
+
+    // cout << "Ordered Rules: ";
+    // for (int i = 0; i < 4; i++)
+    // {
+    //     if (availableRules[i] != nullptr)
+    //     {
+    //       int target = availableRules[i]->getTargetId();
+    //       cout << target << ": " << maze->getNodeById(target)->getHeuristic() << endl;
+    //     }
+    // }
+    // cout << endl;
+}
+
+void pushInOpenedStack(Edge **availableRules, stack<TreeNode *> &abertos)
+{
+  for (int i = 0; i < 4; i++)
+  {
+    if (availableRules[i] != nullptr)
+    {
+      abertos.push(new TreeNode(availableRules[i]->getTargetId()));
+    }
+  }
+}
+
+void printStack(stack<TreeNode *> pilha)
+{
+  cout << "Stack: ";
+  while (!pilha.empty())
+  {
+    TreeNode *node = pilha.top();
+    pilha.pop();
+
+    if (pilha.size() != 0)
+    {
+      cout << node->getId() << " -> ";
+    }
+    else
+      cout << node->getId() << " ";
+  }
+  cout << " ___ " << endl;
+}
+
+
+stack<TreeNode *> Tree::greedySearch(Graph *maze)
+{
+    stack<TreeNode *> pilha;
+
+    if (maze->getFirstNode() == nullptr)
+        return pilha;
+
+    // pega id do primeiro nó do labirinto == estado inicial
+    Node *currentMazeNode = maze->getFirstNode();
+    TreeNode *currentState = new TreeNode(currentMazeNode->getId());
+    insertRoot(currentState);
+
+    stack<TreeNode *> abertos;
+
+    Edge *chosenEdge = nullptr;
+
+    while (currentMazeNode->getTag() != "final")
+    {
+        Edge **availableRules = getAvailableRules(currentMazeNode, currentState);
+        orderByHeuristic(availableRules, maze);
+
+        currentState->setAvailableRules(availableRules);
+
+        // nó puxou as regras, logo foi visitado
+        currentMazeNode->setVisited();
+
+        for (int i = 0; i < 4; i++)
+        {
+            
+            if (availableRules[i] != nullptr)
+            {
+                chosenEdge = availableRules[i];
+
+                // Cria novo nó cujo id é o nó destino daquela aresta no grafo
+                TreeNode *newTreeNode = new TreeNode(chosenEdge->getTargetId());
+
+                // Insere novo nó na árvore
+                this->insert(currentState, newTreeNode, chosenEdge);
+
+                // Remove aquela regra da lista de possíveis
+                availableRules[i] = nullptr;
+
+                // Seta regras disponíveis daquele novo nó
+                currentState->setAvailableRules(availableRules);
+
+                // Marca a aresta utilizada para chegar até o novo nó
+                newTreeNode->setUsedEdge(chosenEdge);
+
+                // Troca nó atual do grafo de acordo com a aresta tomada
+                currentMazeNode = maze->getNodeById(chosenEdge->getTargetId());
+
+                abertos.push(newTreeNode);
+            }
+        }
+        currentState = abertos.top();
+        abertos.pop();
+        currentMazeNode = maze->getNodeById(currentState->getId());
+    }
+
+    // coloca todos os nós da busca solução em uma pilha
+    while (currentState != this->root)
+    {
+        pilha.push(currentState);
+        currentState = currentState->getFather();
+    }
+    // add nó inicial
+    pilha.push(currentState);
+
+    // printStack(pilha);
+
+    return pilha;
+}
+
+
+
 
 #endif // TREE_H

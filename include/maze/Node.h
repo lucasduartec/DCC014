@@ -23,10 +23,11 @@ private:
     bool visited;
     string tag;      // inicial ou final
     string position; // posição para o graphviz
+    double heuristic;
 
 public:
     // Constructor
-    Node(int id, string tag, string position);
+    Node(int id, string tag, string position, double heuristic);
 
     // Destructor
     ~Node();
@@ -39,6 +40,7 @@ public:
     Node *getNextNode();
     string getTag();
     string getPosition();
+    double getHeuristic();
 
     // Setters
     void setNextNode(Node *node);
@@ -51,7 +53,7 @@ public:
 };
 
 // Construtor
-Node::Node(int id, string tag, string position)
+Node::Node(int id, string tag, string position, double heuristic)
 {
     this->id = id;
     this->visited = false;
@@ -59,6 +61,9 @@ Node::Node(int id, string tag, string position)
     this->nextNode = nullptr;
     this->tag = tag;
     this->position = position;
+    this->heuristic = heuristic;
+
+    // cout << "Node " << this->id << " -> " << this->heuristic << endl;
 };
 
 // Destrutor
@@ -110,6 +115,11 @@ Node *Node::getNextNode()
 string Node::getTag()
 {
     return this->tag;
+}
+
+double Node::getHeuristic()
+{
+    return this->heuristic;
 }
 
 // Setters

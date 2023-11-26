@@ -1,9 +1,12 @@
 {
     "files.associations": {
-        "*.h ": "cpp",
-        "new": "cpp",
-        "iostream": "cpp",
-        "iomanip": "cpp",
-        "unordered_map": "cpp"
+      "*.h ": "cpp",
+      "new": "cpp",
+      "iostream": "cpp",
+      "iomanip": "cpp",
+      "unordered_map": "cpp",
+      "random": "cpp",
+      "cmath": "cpp",
+      "iosfwd": "cpp"
     }
 }

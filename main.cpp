@@ -137,35 +137,46 @@ void writeOutputFile(Graph *graph, Tree *searchTree, int option)
 
 void printSolution(stack<TreeNode *> pilha, string search)
 {
+  cout << search + "Solution: ";
+  while (!pilha.empty())
+  {
+    TreeNode *node = pilha.top();
+    pilha.pop();
 
-    cout << search << " Search solution :" << endl;
-
-    while (!pilha.empty())
+    if (pilha.size() != 0)
     {
-        TreeNode *node = pilha.top();
-        pilha.pop();
-
-        if (pilha.size() != 0)
-        {
-            cout << node->getId() << " -> ";
-        }
-        else
-            cout << node->getId() << " ";
+      cout << node->getId() << " -> ";
     }
+    else
+      cout << node->getId() << " ";
+  }
+  cout << " ___ " << endl;
 }
 
 int main(int argc, char const *argv[])
 {
+    Graph *maze1 = new Graph();
+    maze1->generateMazeWithHeuristic();
+
+    Tree *greedySearchTree = new Tree();
+    stack<TreeNode *> greedySolution = greedySearchTree->greedySearch(maze1);
+
+    writeOutputFile(maze1, greedySearchTree, 0);
+    writeOutputFile(maze1, greedySearchTree, 1);
+
+    printSolution(greedySolution, "GreedySearch");
+
+    
     Graph *maze = new Graph();
     maze->generateLittleMaze();
 
     Tree *searchTree = new Tree();
-    stack<TreeNode *> solution = searchTree->backtrackingSearch(maze);
+    stack<TreeNode *> backTrackinhSolution = searchTree->backtrackingSearch(maze);
 
     writeOutputFile(maze, searchTree, 0);
     writeOutputFile(maze, searchTree, 1);
 
-    printSolution(solution, "BacktrackingSearch");
+    printSolution(backTrackinhSolution, "BacktrackingSearch");
 
     // searchTree->traverseAndPrint();
 
