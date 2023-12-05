@@ -137,48 +137,89 @@ void writeOutputFile(Graph *graph, Tree *searchTree, int option)
 
 void printSolution(stack<TreeNode *> pilha, string search)
 {
-  cout << search + "Solution: ";
-  while (!pilha.empty())
-  {
-    TreeNode *node = pilha.top();
-    pilha.pop();
-
-    if (pilha.size() != 0)
+    cout << search + "Solution: ";
+    while (!pilha.empty())
     {
-      cout << node->getId() << " -> ";
+        TreeNode *node = pilha.top();
+        pilha.pop();
+
+        if (pilha.size() != 0)
+        {
+            cout << node->getId() << " -> ";
+        }
+        else
+            cout << node->getId() << " ";
     }
-    else
-      cout << node->getId() << " ";
-  }
-  cout << " ___ " << endl;
+    cout << " ___ " << endl;
 }
 
 int main(int argc, char const *argv[])
 {
-    Graph *maze1 = new Graph();
-    maze1->generateMazeWithHeuristic();
 
-    Tree *greedySearchTree = new Tree();
-    stack<TreeNode *> greedySolution = greedySearchTree->greedySearch(maze1);
-
-    writeOutputFile(maze1, greedySearchTree, 0);
-    writeOutputFile(maze1, greedySearchTree, 1);
-
-    printSolution(greedySolution, "GreedySearch");
-
-    
     Graph *maze = new Graph();
     maze->generateLittleMaze();
 
     Tree *searchTree = new Tree();
-    stack<TreeNode *> backTrackinhSolution = searchTree->backtrackingSearch(maze);
+    std::stack<TreeNode *> solution;
+
+    int option = 0;
+
+    while (option < 1 || option > 6)
+    {
+
+        cout << endl
+             << "Selecione a busca: " << endl
+             << endl
+             << "[1] Busca backtracking" << endl
+             << "[2] Busca em largura" << endl
+             << "[3] Busca em profundidade" << endl
+             << "[4] Busca gulosa" << endl
+             << "[5] Busca ordenada" << endl
+             << "[6] Busca A*" << endl
+             << endl;
+
+        cin >> option;
+    }
+
+    switch (option)
+    {
+
+    case 1:
+        solution = searchTree->backtrackingSearch(maze);
+        printSolution(solution, "Backtracking Search");
+        break;
+
+    case 2:
+        solution = searchTree->breadthFirstSearch(maze);
+        printSolution(solution, "Breadth-First Search");
+        break;
+
+    case 3:
+        solution = searchTree->depthFirstSearch(maze);
+        printSolution(solution, "Depth-First Search");
+        break;
+
+    case 4:
+        solution = searchTree->greedySearch(maze);
+        printSolution(solution, "Greedy Search");
+        break;
+
+    case 5:
+        solution = searchTree->backtrackingSearch(maze);
+        printSolution(solution, "Best-First Search");
+        break;
+
+    case 6:
+        solution = searchTree->backtrackingSearch(maze);
+        printSolution(solution, "A-Star Search");
+        break;
+
+    default:
+        break;
+    }
 
     writeOutputFile(maze, searchTree, 0);
     writeOutputFile(maze, searchTree, 1);
-
-    printSolution(backTrackinhSolution, "BacktrackingSearch");
-
-    // searchTree->traverseAndPrint();
 
     delete maze;
     delete searchTree;
