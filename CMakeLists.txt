@@ -3,6 +3,7 @@ project(maze)
 
 include_directories(include/maze)
 include_directories(include/tree)
+include_directories(include/perf)
 
 add_executable(main main.cpp)
 
