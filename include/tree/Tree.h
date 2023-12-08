@@ -17,6 +17,7 @@ class Tree
     // attributes
 private:
     TreeNode *root;
+    int statesNumber; 
 
 public:
     // Constructor
@@ -26,6 +27,7 @@ public:
     ~Tree();
 
     // Operations
+    int getStatesNumber();
     void insert(TreeNode *currentState, TreeNode *newTreeNode, Edge *chosenEdge);
     void insertRoot(TreeNode *rootNode);
     TreeNode *getRoot();
@@ -43,12 +45,19 @@ public:
 Tree::Tree()
 {
     this->root = nullptr;
+    this->statesNumber = 0;
 }
 
 // Destrutor
 Tree::~Tree()
 {
     this->root = nullptr;
+    this->statesNumber = -1;
+}
+
+int Tree::getStatesNumber()
+{
+    return this->statesNumber;
 }
 
 void Tree::insertRoot(TreeNode *rootNode)
@@ -127,6 +136,7 @@ void Tree::insert(TreeNode *currentState, TreeNode *newTreeNode, Edge *chosenEdg
         break;
     }
 
+    this->statesNumber++;
     newTreeNode->setUsedEdge(chosenEdge);
 }
 

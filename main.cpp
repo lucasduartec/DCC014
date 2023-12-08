@@ -137,7 +137,7 @@ void writeOutputFile(Graph *graph, Tree *searchTree, int option)
     }
 }
 
-void printSolution(stack<TreeNode *> pilha, string search, Perf::PerformanceTimer clock)
+void printSolution(stack<TreeNode *> pilha, string search, Perf::PerformanceTimer clock, int statesNumber)
 {
     stringstream formattedTime;
 
@@ -156,14 +156,16 @@ void printSolution(stack<TreeNode *> pilha, string search, Perf::PerformanceTime
     }
     cout << " ___ " << endl;
 
+    //transforma em mili segundos
     double elapsedTimeInSeconds = clock.elapsed_time();
     double elapsedTimeInMilliseconds = elapsedTimeInSeconds * 1000; 
 
     formattedTime << std::fixed << std::setprecision(6) << elapsedTimeInMilliseconds;
     string timeStr = formattedTime.str();
-    
+
     cout << "TEMPO -- " << timeStr << " milisegundos";
     cout << endl;
+    cout << "Estados gerados -- " << statesNumber << " estados" << endl;
 }
 
 int main(int argc, char const *argv[])
@@ -177,7 +179,7 @@ int main(int argc, char const *argv[])
 
     // clock
     Perf::PerformanceTimer clock;
-
+    int statesNumber = 0;
     int option = 0;
 
     while (option < 1 || option > 6)
@@ -203,43 +205,44 @@ int main(int argc, char const *argv[])
     case 1:
         clock.start();
         solution = searchTree->backtrackingSearch(maze);
+        statesNumber = searchTree->getStatesNumber();
         clock.stop();
-        printSolution(solution, "Backtracking Search", clock);
+        printSolution(solution, "Backtracking Search", clock, statesNumber);
         break;
 
     case 2:
         clock.start();
         solution = searchTree->breadthFirstSearch(maze);
         clock.stop();
-        printSolution(solution, "Breadth-First Search", clock);
+        printSolution(solution, "Breadth-First Search", clock, statesNumber);
         break;
 
     case 3:
         clock.start();
         solution = searchTree->depthFirstSearch(maze);
         clock.stop();
-        printSolution(solution, "Depth-First Search", clock);
+        printSolution(solution, "Depth-First Search", clock, statesNumber);
         break;
 
     case 4:
         clock.start();
         solution = searchTree->greedySearch(maze);
         clock.stop();
-        printSolution(solution, "Greedy Search", clock);
+        printSolution(solution, "Greedy Search", clock, statesNumber);
         break;
 
     case 5:
         clock.start();
         solution = searchTree->backtrackingSearch(maze);
         clock.stop();
-        printSolution(solution, "Best-First Search", clock);
+        printSolution(solution, "Best-First Search", clock, statesNumber);
         break;
 
     case 6:
         clock.start();
         solution = searchTree->backtrackingSearch(maze);
         clock.stop();
-        printSolution(solution, "A-Star Search", clock);
+        printSolution(solution, "A-Star Search", clock, statesNumber);
         break;
 
     default:
