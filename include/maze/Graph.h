@@ -220,7 +220,36 @@ void Graph::generateMaze()
     Node *node37 = this->insertNode("intermediario", "7,1");
     Node *node38 = this->insertNode("intermediario", "7,0");
     Node *node39 = this->insertNode("intermediario", "6,0");
-    Node *node40 = this->insertNode("final", "9,0");
+
+
+
+    // NOVAS ADIÇÕES
+    Node *node40 = this->insertNode("intermediario", "0,-1");
+    Node *node41 = this->insertNode("intermediario", "0,-2");
+    Node *node42 = this->insertNode("intermediario", "3,-2");
+    Node *node43 = this->insertNode("intermediario", "1,-1");
+    Node *node44 = this->insertNode("intermediario", "4,-1");
+    Node *node45 = this->insertNode("intermediario", "3,-1");
+    Node *node46 = this->insertNode("intermediario", "6,-1");
+    Node *node47 = this->insertNode("intermediario", "7,-2");
+
+    Node *node48 = this->insertNode("final", "9,0");
+
+    this->insertEdge(node11, node40, 2);
+    this->insertEdge(node40, node41, 2);
+    this->insertEdge(node40, node43, 3);
+    this->insertEdge(node41, node42, 3);
+    this->insertEdge(node15, node44, 2);
+    this->insertEdge(node37, node28, 0);
+    this->insertEdge(node25, node18, 2);
+    this->insertEdge(node43, node45, 3);
+    this->insertEdge(node44, node46, 3);
+    this->insertEdge(node38, node47, 3);
+
+    //REMOVIDAS
+    // this->insertEdge(node17, node18, 3);
+    // this->insertEdge(node27, node28, 3);
+
 
     // 0 -- cima
     // 1 -- esquerda
@@ -244,7 +273,6 @@ void Graph::generateMaze()
     this->insertEdge(node14, node15, 2);
     this->insertEdge(node15, node16, 3);
     this->insertEdge(node14, node17, 0);
-    this->insertEdge(node17, node18, 3);
     this->insertEdge(node18, node19, 2);
     this->insertEdge(node19, node20, 3);
     this->insertEdge(node17, node21, 0);
@@ -254,7 +282,6 @@ void Graph::generateMaze()
     this->insertEdge(node24, node25, 2);
     this->insertEdge(node25, node26, 3);
     this->insertEdge(node26, node27, 2);
-    this->insertEdge(node27, node28, 3);
     this->insertEdge(node28, node29, 0);
     this->insertEdge(node26, node30, 0);
     this->insertEdge(node30, node31, 3);
@@ -266,7 +293,7 @@ void Graph::generateMaze()
     this->insertEdge(node34, node37, 1);
     this->insertEdge(node37, node38, 2);
     this->insertEdge(node38, node39, 1);
-    this->insertEdge(node38, node40, 3);
+    this->insertEdge(node38, node48, 3);
 }
 
 void Graph::generateLittleMaze(){
