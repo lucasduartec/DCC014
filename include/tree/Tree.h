@@ -18,6 +18,7 @@ class Tree
 private:
     TreeNode *root;
     int statesNumber; 
+    int visitedStatesNumber;
 
 public:
     // Constructor
@@ -26,8 +27,11 @@ public:
     // Destructor
     ~Tree();
 
-    // Operations
+    // Getters
     int getStatesNumber();
+    int getVisitedStatesNumber();
+
+    //Operations
     void insert(TreeNode *currentState, TreeNode *newTreeNode, Edge *chosenEdge);
     void insertRoot(TreeNode *rootNode);
     TreeNode *getRoot();
@@ -46,6 +50,7 @@ Tree::Tree()
 {
     this->root = nullptr;
     this->statesNumber = 0;
+    this->visitedStatesNumber = 0;
 }
 
 // Destrutor
@@ -53,11 +58,17 @@ Tree::~Tree()
 {
     this->root = nullptr;
     this->statesNumber = -1;
+    this->visitedStatesNumber = -1;
 }
 
 int Tree::getStatesNumber()
 {
     return this->statesNumber;
+}
+
+int Tree::getVisitedStatesNumber()
+{
+    return this->visitedStatesNumber;
 }
 
 void Tree::insertRoot(TreeNode *rootNode)
@@ -261,6 +272,7 @@ stack<TreeNode *> Tree::backtrackingSearch(Graph *maze)
 
         // nó puxou as regras, logo foi visitado
         currentMazeNode->setVisited();
+        this->visitedStatesNumber++;
 
         // contador para verificar se todas as regras são nulas, pois se forem é necessário retornar para o pai
         int count = 0;
@@ -304,6 +316,9 @@ stack<TreeNode *> Tree::backtrackingSearch(Graph *maze)
             currentState->setBacktracked(true);
             currentState = currentState->getFather();
             currentMazeNode = maze->getNodeById(currentState->getId());
+
+            //corrigir problema do numero de estados visitados
+            this->visitedStatesNumber--;
         }
     }
 
@@ -347,6 +362,7 @@ stack<TreeNode *> Tree::breadthFirstSearch(Graph *maze)
 
         // nó puxou as regras, logo foi visitado
         currentMazeNode->setVisited();
+        this->visitedStatesNumber++;
 
         for (int i = 0; i < 4; i++)
         {
@@ -418,6 +434,7 @@ stack<TreeNode *> Tree::depthFirstSearch(Graph *maze)
 
         // nó puxou as regras, logo foi visitado
         currentMazeNode->setVisited();
+        this->visitedStatesNumber++;
 
         for (int i = 0; i < 4; i++)
         {
@@ -562,6 +579,7 @@ stack<TreeNode *> Tree::greedySearch(Graph *maze)
 
         // nó puxou as regras, logo foi visitado
         currentMazeNode->setVisited();
+                this->visitedStatesNumber++;
 
         for (int i = 0; i < 4; i++)
         {

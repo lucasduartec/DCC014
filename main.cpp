@@ -137,7 +137,7 @@ void writeOutputFile(Graph *graph, Tree *searchTree, int option)
     }
 }
 
-void printSolution(stack<TreeNode *> pilha, string search, Perf::PerformanceTimer clock, int statesNumber)
+void printSolution(stack<TreeNode *> pilha, string search, Perf::PerformanceTimer clock, int statesNumber, int visitedStatesNumber)
 {
     stringstream formattedTime;
 
@@ -156,9 +156,9 @@ void printSolution(stack<TreeNode *> pilha, string search, Perf::PerformanceTime
     }
     cout << " ___ " << endl;
 
-    //transforma em mili segundos
+    // transforma em mili segundos
     double elapsedTimeInSeconds = clock.elapsed_time();
-    double elapsedTimeInMilliseconds = elapsedTimeInSeconds * 1000; 
+    double elapsedTimeInMilliseconds = elapsedTimeInSeconds * 1000;
 
     formattedTime << std::fixed << std::setprecision(6) << elapsedTimeInMilliseconds;
     string timeStr = formattedTime.str();
@@ -166,6 +166,7 @@ void printSolution(stack<TreeNode *> pilha, string search, Perf::PerformanceTime
     cout << "TEMPO -- " << timeStr << " milisegundos";
     cout << endl;
     cout << "Estados gerados -- " << statesNumber << " estados" << endl;
+    cout << "Estados vsitados -- " << visitedStatesNumber << " estados" << endl;
 }
 
 int main(int argc, char const *argv[])
@@ -179,7 +180,11 @@ int main(int argc, char const *argv[])
 
     // clock
     Perf::PerformanceTimer clock;
+
+    // aux var
     int statesNumber = 0;
+    int visitedStatesNumber = 0;
+
     int option = 0;
 
     while (option < 1 || option > 6)
@@ -206,43 +211,54 @@ int main(int argc, char const *argv[])
         clock.start();
         solution = searchTree->backtrackingSearch(maze);
         statesNumber = searchTree->getStatesNumber();
+        visitedStatesNumber = searchTree->getVisitedStatesNumber();
         clock.stop();
-        printSolution(solution, "Backtracking Search", clock, statesNumber);
+        printSolution(solution, "Backtracking Search", clock, statesNumber, visitedStatesNumber);
         break;
 
     case 2:
         clock.start();
         solution = searchTree->breadthFirstSearch(maze);
         clock.stop();
-        printSolution(solution, "Breadth-First Search", clock, statesNumber);
+        statesNumber = searchTree->getStatesNumber();
+        visitedStatesNumber = searchTree->getVisitedStatesNumber();
+        printSolution(solution, "Breadth-First Search", clock, statesNumber, visitedStatesNumber);
         break;
 
     case 3:
         clock.start();
         solution = searchTree->depthFirstSearch(maze);
         clock.stop();
-        printSolution(solution, "Depth-First Search", clock, statesNumber);
+        statesNumber = searchTree->getStatesNumber();
+        visitedStatesNumber = searchTree->getVisitedStatesNumber();
+        printSolution(solution, "Depth-First Search", clock, statesNumber, visitedStatesNumber);
         break;
 
     case 4:
         clock.start();
         solution = searchTree->greedySearch(maze);
         clock.stop();
-        printSolution(solution, "Greedy Search", clock, statesNumber);
+        statesNumber = searchTree->getStatesNumber();
+        visitedStatesNumber = searchTree->getVisitedStatesNumber();
+        printSolution(solution, "Greedy Search", clock, statesNumber, visitedStatesNumber);
         break;
 
     case 5:
         clock.start();
         solution = searchTree->backtrackingSearch(maze);
         clock.stop();
-        printSolution(solution, "Best-First Search", clock, statesNumber);
+        statesNumber = searchTree->getStatesNumber();
+        visitedStatesNumber = searchTree->getVisitedStatesNumber();
+        printSolution(solution, "Best-First Search", clock, statesNumber, visitedStatesNumber);
         break;
 
     case 6:
         clock.start();
         solution = searchTree->backtrackingSearch(maze);
         clock.stop();
-        printSolution(solution, "A-Star Search", clock, statesNumber);
+        statesNumber = searchTree->getStatesNumber();
+        visitedStatesNumber = searchTree->getVisitedStatesNumber();
+        printSolution(solution, "A-Star Search", clock, statesNumber, visitedStatesNumber);
         break;
 
     default:

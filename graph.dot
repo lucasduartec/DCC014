@@ -46,8 +46,8 @@ strict graph grafo {
   44 [weight = 44.00, pos = "4,-1!"];
   45 [weight = 45.00, pos = "3,-1!"];
   46 [weight = 46.00, pos = "6,-1!"];
-  47 [weight = 47.00, pos = "7,-2!"];
-  48 [weight = 48.00, pos = "9,0!", color = green];
+  47 [weight = 47.00, pos = "7,-2!", color = green];
+  48 [weight = 48.00, pos = "9,0!"];
 
   0 -- 1
   0 -- 4
