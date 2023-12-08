@@ -113,9 +113,9 @@ void writeOutputFile(Graph *graph, Tree *searchTree, int option)
     std::string outputPath;
 
     if (option == 0)
-        outputPath = "../graph.dot";
+        outputPath = "../images/dot/graph.dot";
     else
-        outputPath = "../tree.dot";
+        outputPath = "../images/dot/tree.dot";
 
     // Abra o arquivo "output.dot" no caminho especificado e apague o conteúdo antigo
     std::ofstream outputFile(outputPath, std::ios::trunc);

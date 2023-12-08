@@ -4,5 +4,7 @@ make clean
 make
 ./main
 cd ..
-dot -Kfdp -n -Tpng -o grafo.png graph.dot
-dot -Tpng tree.dot -o arvore.png
+cd images
+cd dot
+dot -Kfdp -n -Tpng -o ../labirinto.png graph.dot
+dot -Tpng tree.dot -o ../arvore.png
