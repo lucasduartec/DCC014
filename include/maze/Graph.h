@@ -244,7 +244,7 @@ void Graph::generateMaze()
     this->insertEdge(node25, node18, 2);
     this->insertEdge(node43, node45, 3);
     this->insertEdge(node44, node46, 3);
-    this->insertEdge(node38, node47, 3);
+    this->insertEdge(node38, node47, 2);
 
     //REMOVIDAS
     // this->insertEdge(node17, node18, 3);
