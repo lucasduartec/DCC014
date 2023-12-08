@@ -47,8 +47,8 @@ public:
     double calculateHeuristic(string position, string finalPosition);
 
     void generateMaze();
-    void generateLittleMaze();
-    void generateLittleMazeWithHeuristic();
+    void generateSmallMaze();
+    void generateSmallMazeWithHeuristic();
     void generateMazeWithHeuristic();
 };
 
@@ -296,7 +296,7 @@ void Graph::generateMaze()
     this->insertEdge(node38, node48, 3);
 }
 
-void Graph::generateLittleMaze(){
+void Graph::generateSmallMaze(){
     Node *node0 = this->insertNode("inicial", "2,2");
     Node *node1 = this->insertNode("intermediario", "1,2");
     Node *node2 = this->insertNode("intermediario", "1,1");
@@ -335,7 +335,7 @@ double Graph::calculateHeuristic(string position, string finalPosition){
 }
 
 
-void Graph::generateLittleMazeWithHeuristic(){
+void Graph::generateSmallMazeWithHeuristic(){
 
     string finalNodePosition = "3,1";
 

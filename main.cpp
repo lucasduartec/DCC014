@@ -185,23 +185,29 @@ int main(int argc, char const *argv[])
     int statesNumber = 0;
     int visitedStatesNumber = 0;
 
-    int option = 0;
+    int option = -1;
 
-    while (option < 1 || option > 6)
+    std::cout << "+---------------------------+" << std::endl
+              << "|   PROBLEMA DO LABIRINTO   |" << std::endl
+              << "|      MÉTODOS DE BUSCA     |" << std::endl
+              << "+---------------------------+" << std::endl
+              << "|    Selecione a busca:     |" << std::endl
+              << "|                           |" << std::endl
+              << "| [1] Busca backtracking    |" << std::endl
+              << "| [2] Busca em largura      |" << std::endl
+              << "| [3] Busca em profundidade |" << std::endl
+              << "| [4] Busca gulosa          |" << std::endl
+              << "| [5] Busca ordenada        |" << std::endl
+              << "| [6] Busca A*              |" << std::endl
+              << "|                           |" << std::endl
+              << "| [0] Sair                  |" << std::endl
+              << "+---------------------------+" << std::endl;
+
+    while (option < 0 || option > 6)
     {
-
-        cout << endl
-             << "Selecione a busca: " << endl
-             << endl
-             << "[1] Busca backtracking" << endl
-             << "[2] Busca em largura" << endl
-             << "[3] Busca em profundidade" << endl
-             << "[4] Busca gulosa" << endl
-             << "[5] Busca ordenada" << endl
-             << "[6] Busca A*" << endl
-             << endl;
-
-        cin >> option;
+        std::cout << "  Digite sua opção: ";
+        std::cin >> option;
+        std::cout << endl;
     }
 
     switch (option)

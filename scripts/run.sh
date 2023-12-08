@@ -2,6 +2,7 @@
 cd build
 make clean
 make
+clear
 ./main
 cd ..
 cd images
