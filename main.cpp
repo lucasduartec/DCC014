@@ -154,7 +154,7 @@ void printSolution(stack<TreeNode *> pilha, string search, Perf::PerformanceTime
         else
             cout << node->getId() << " ";
     }
-    cout << " ___ " << endl;
+    cout << " ENDED " << endl;
 
     // transforma em mili segundos
     double elapsedTimeInSeconds = clock.elapsed_time();
@@ -164,10 +164,10 @@ void printSolution(stack<TreeNode *> pilha, string search, Perf::PerformanceTime
     string timeStr = formattedTime.str();
 
     cout << endl
-         << "TEMPO -- " << timeStr << " milisegundos";
+         << "Tempo: " << timeStr << " milisegundos";
     cout << endl;
-    cout << "Estados gerados -- " << statesNumber << " estados" << endl;
-    cout << "Estados visitados -- " << visitedStatesNumber << " estados" << endl;
+    cout << "Estados gerados: " << statesNumber << " estados" << endl;
+    cout << "Estados visitados: " << visitedStatesNumber << " estados" << endl;
 }
 
 int main(int argc, char const *argv[])
@@ -217,9 +217,9 @@ int main(int argc, char const *argv[])
     case 1:
         clock.start();
         solution = searchTree->backtrackingSearch(maze);
+        clock.stop();
         statesNumber = searchTree->getStatesNumber();
         visitedStatesNumber = searchTree->getVisitedStatesNumber();
-        clock.stop();
         printSolution(solution, "Backtracking Search", clock, statesNumber, visitedStatesNumber);
         break;
 
