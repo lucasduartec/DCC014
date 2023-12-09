@@ -398,6 +398,10 @@ stack<TreeNode *> Tree::breadthFirstSearch(Graph *maze)
         currentMazeNode = maze->getNodeById(currentState->getId());
     }
 
+    //nó final
+    this->visitedStatesNumber++;
+
+
     // coloca todos os nós da busca solução em uma pilha
     while (currentState != this->root)
     {
@@ -469,6 +473,9 @@ stack<TreeNode *> Tree::depthFirstSearch(Graph *maze)
         abertos.pop();
         currentMazeNode = maze->getNodeById(currentState->getId());
     }
+
+    //nó final
+    this->visitedStatesNumber++;
 
     // coloca todos os nós da busca solução em uma pilha
     while (currentState != this->root)
@@ -613,6 +620,9 @@ stack<TreeNode *> Tree::greedySearch(Graph *maze)
         abertos.pop();
         currentMazeNode = maze->getNodeById(currentState->getId());
     }
+
+    //nó final
+    this->visitedStatesNumber++;
 
     // coloca todos os nós da busca solução em uma pilha
     while (currentState != this->root)
