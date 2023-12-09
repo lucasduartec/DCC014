@@ -163,17 +163,18 @@ void printSolution(stack<TreeNode *> pilha, string search, Perf::PerformanceTime
     formattedTime << std::fixed << std::setprecision(6) << elapsedTimeInMilliseconds;
     string timeStr = formattedTime.str();
 
-    cout << "TEMPO -- " << timeStr << " milisegundos";
+    cout << endl
+         << "TEMPO -- " << timeStr << " milisegundos";
     cout << endl;
     cout << "Estados gerados -- " << statesNumber << " estados" << endl;
-    cout << "Estados vsitados -- " << visitedStatesNumber << " estados" << endl;
+    cout << "Estados visitados -- " << visitedStatesNumber << " estados" << endl;
 }
 
 int main(int argc, char const *argv[])
 {
 
     Graph *maze = new Graph();
-    maze->generateMaze();
+    maze->generateSmallMaze();
 
     Tree *searchTree = new Tree();
     std::stack<TreeNode *> solution;
