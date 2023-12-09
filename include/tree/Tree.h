@@ -345,7 +345,6 @@ stack<TreeNode *> Tree::breadthFirstSearch(Graph *maze)
     if (maze->getFirstNode() == nullptr)
         return pilha;
 
-    // pega id do primeiro nó do labirinto == estado inicial
     Node *currentMazeNode = maze->getFirstNode();
 
     TreeNode *currentState = new TreeNode(currentMazeNode->getId());
@@ -397,6 +396,8 @@ stack<TreeNode *> Tree::breadthFirstSearch(Graph *maze)
         abertos.pop();
         currentMazeNode = maze->getNodeById(currentState->getId());
     }
+
+    currentState->setFinal();
 
     // coloca todos os nós da busca solução em uma pilha
     while (currentState != this->root)
@@ -469,6 +470,8 @@ stack<TreeNode *> Tree::depthFirstSearch(Graph *maze)
         abertos.pop();
         currentMazeNode = maze->getNodeById(currentState->getId());
     }
+
+    currentState->setFinal();
 
     // coloca todos os nós da busca solução em uma pilha
     while (currentState != this->root)
