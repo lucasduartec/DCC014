@@ -14,29 +14,28 @@ using namespace std;
 
 class Tree
 {
-    // attributes
+
 private:
-    TreeNode *root;
-    int statesNumber; 
-    int visitedStatesNumber;
+    TreeNode *root;          // Raíz da árvore
+    int statesNumber;        // Número de estados
+    int visitedStatesNumber; // Número de estados explorados
 
 public:
-    // Constructor
     Tree();
-
-    // Destructor
     ~Tree();
 
-    // Getters
-    int getStatesNumber();
-    int getVisitedStatesNumber();
-
-    //Operations
+    // Operations
     void insert(TreeNode *currentState, TreeNode *newTreeNode, Edge *chosenEdge);
     void insertRoot(TreeNode *rootNode);
-    TreeNode *getRoot();
     void remove(TreeNode *node);
     void clearTree();
+
+    // Getters
+    TreeNode *getRoot();
+
+    // Aux
+    int getStatesNumber();
+    int getVisitedStatesNumber();
     void traverseAndPrint(TreeNode *node, string &dot);
 
     // Searches
@@ -44,7 +43,10 @@ public:
     stack<TreeNode *> breadthFirstSearch(Graph *maze);
     stack<TreeNode *> depthFirstSearch(Graph *maze);
     stack<TreeNode *> greedySearch(Graph *maze);
+    stack<TreeNode *> orderedSearch(Graph *maze);
+    stack<TreeNode *> aStarSearch(Graph *maze);
 };
+
 // Construtor
 Tree::Tree()
 {
@@ -317,7 +319,7 @@ stack<TreeNode *> Tree::backtrackingSearch(Graph *maze)
             currentState = currentState->getFather();
             currentMazeNode = maze->getNodeById(currentState->getId());
 
-            //corrigir problema do numero de estados visitados
+            // corrigir problema do numero de estados visitados
             this->visitedStatesNumber--;
         }
     }
@@ -499,18 +501,17 @@ void orderByHeuristic(Edge **availableRules, Graph *maze)
     // Bubble sort
     for (int i = 0; i < 4; i++)
     {
-      for (int j = 0; j < 4 - i - 1; j++)
-      {
-        if (availableRules[j] != nullptr && availableRules[j + 1] != nullptr &&
-          maze->getNodeById(availableRules[j]->getTargetId())->getHeuristic() < maze->getNodeById(availableRules[j + 1]->getTargetId())->getHeuristic())
+        for (int j = 0; j < 4 - i - 1; j++)
         {
-          Edge *temp = availableRules[j];
-          availableRules[j] = availableRules[j + 1];
-          availableRules[j + 1] = temp;
+            if (availableRules[j] != nullptr && availableRules[j + 1] != nullptr &&
+                maze->getNodeById(availableRules[j]->getTargetId())->getHeuristic() < maze->getNodeById(availableRules[j + 1]->getTargetId())->getHeuristic())
+            {
+                Edge *temp = availableRules[j];
+                availableRules[j] = availableRules[j + 1];
+                availableRules[j + 1] = temp;
+            }
         }
-      }
     }
-
 
     // cout << "Ordered Rules: ";
     // for (int i = 0; i < 4; i++)
@@ -526,33 +527,32 @@ void orderByHeuristic(Edge **availableRules, Graph *maze)
 
 void pushInOpenedStack(Edge **availableRules, stack<TreeNode *> &abertos)
 {
-  for (int i = 0; i < 4; i++)
-  {
-    if (availableRules[i] != nullptr)
+    for (int i = 0; i < 4; i++)
     {
-      abertos.push(new TreeNode(availableRules[i]->getTargetId()));
+        if (availableRules[i] != nullptr)
+        {
+            abertos.push(new TreeNode(availableRules[i]->getTargetId()));
+        }
     }
-  }
 }
 
 void printStack(stack<TreeNode *> pilha)
 {
-  cout << "Stack: ";
-  while (!pilha.empty())
-  {
-    TreeNode *node = pilha.top();
-    pilha.pop();
-
-    if (pilha.size() != 0)
+    cout << "Stack: ";
+    while (!pilha.empty())
     {
-      cout << node->getId() << " -> ";
-    }
-    else
-      cout << node->getId() << " ";
-  }
-  cout << " ___ " << endl;
-}
+        TreeNode *node = pilha.top();
+        pilha.pop();
 
+        if (pilha.size() != 0)
+        {
+            cout << node->getId() << " -> ";
+        }
+        else
+            cout << node->getId() << " ";
+    }
+    cout << " ___ " << endl;
+}
 
 stack<TreeNode *> Tree::greedySearch(Graph *maze)
 {
@@ -579,11 +579,11 @@ stack<TreeNode *> Tree::greedySearch(Graph *maze)
 
         // nó puxou as regras, logo foi visitado
         currentMazeNode->setVisited();
-                this->visitedStatesNumber++;
+        this->visitedStatesNumber++;
 
         for (int i = 0; i < 4; i++)
         {
-            
+
             if (availableRules[i] != nullptr)
             {
                 chosenEdge = availableRules[i];
@@ -627,8 +627,5 @@ stack<TreeNode *> Tree::greedySearch(Graph *maze)
 
     return pilha;
 }
-
-
-
 
 #endif // TREE_H

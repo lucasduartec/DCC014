@@ -10,35 +10,30 @@
 
 using namespace std;
 
-// Definição da classe nó
-
 class Node
 {
-    // attributes
+
 private:
-    Edge *firstEdge;
-    Edge *lastEdge;
     int id;
     Node *nextNode;
-    bool visited;
-    string tag;      // inicial ou final
-    string position; // posição para o graphviz
-    double heuristic;
+    Edge *firstEdge;
+    Edge *lastEdge;
+    string tag;       // Tag -> (intermediário ou final)
+    bool visited;     // Flag para saber se foi visitado
+    string position;  // Posição do nó no grafo
+    double heuristic; // Heurística do nó
 
 public:
-    // Constructor
     Node(int id, string tag, string position, double heuristic);
-
-    // Destructor
     ~Node();
 
     // Getters
+    int getId() const;
+    Node *getNextNode();
     Edge *getFirstEdge();
     Edge *getLastEdge();
-    int getId() const;
-    int getVisited();
-    Node *getNextNode();
     string getTag();
+    int getVisited();
     string getPosition();
     double getHeuristic();
 
@@ -46,9 +41,6 @@ public:
     void setNextNode(Node *node);
     void setVisited();
 
-    // Other methods
-
-    // Manipulation methods
     void insertEdge(int sourceId, int targetId, int direction);
 };
 

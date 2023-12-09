@@ -9,21 +9,17 @@
 
 using namespace std;
 
-// Definição da classe Edge (Aresta)
 class Edge
 {
 private:
-    // attributes
-    int sourceId;
-    int targetId;
-    int direction;
-    Edge *nextEdge;
+
+    int sourceId; //Id do nó de origem
+    int targetId;   //Id do nó destino
+    int direction;  //Cima, baixo, esquerda ou direita
+    Edge *nextEdge; // Ponteiro para pŕoxima aresta
 
 public:
-    // Construtor
     Edge(int sourceId, int targetId);
-
-    // Destrutor
     ~Edge();
 
     // Getters

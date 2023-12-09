@@ -15,36 +15,29 @@ using namespace std;
 
 class Graph
 {
-    // attributes
+
 private:
-    Node *firstNode;
-    Node *lastNode;
-    int nodeIdCounter;
+    Node *firstNode;   // Ponteiro para primeiro nó do grafo
+    Node *lastNode;    // Ponteiro para último nó do grafo
+    int nodeIdCounter; // Contador de nós do grafo
 
 public:
-    // Constructor
     Graph();
-
-    // Destructor
     ~Graph();
 
-    // getters
+    // Getters
     int getNodeIdCounter();
     Node *getFirstNode();
     Node *getLastNode();
+    Node *getNodeById(int id);
 
-    // Manipulation methods
+    // Insert methods
     Node *insertNode(string tag, string position);
     Node *insertNode(string tag, string position, double heuristic);
     void insertEdge(Node *sourceNode, Node *targetNode, int direction);
 
-    // Aux methods
-    bool searchNode(int id);
-    Node *getNodeById(int id);
-    void displayGraph();
-    void extractNumbers(const std::string& s, int& num1, int& num2);
-
     double calculateHeuristic(string position, string finalPosition);
+    void extractNumbers(const std::string &s, int &num1, int &num2);
 
     void generateMaze();
     void generateSmallMaze();
@@ -142,11 +135,6 @@ void Graph::insertEdge(Node *sourceNode, Node *targetNode, int direction)
     }
 }
 
-bool Graph::searchNode(int id)
-{
-    return this->getNodeById(id) != nullptr;
-}
-
 Node *Graph::getNodeById(int id)
 {
     Node *nextNode = this->firstNode;
@@ -158,24 +146,6 @@ Node *Graph::getNodeById(int id)
         nextNode = nextNode->getNextNode();
     }
     return nullptr;
-}
-
-void Graph::displayGraph()
-{
-    Node *currentNode = firstNode;
-    while (currentNode != nullptr)
-    {
-        cout << "Node ID: " << currentNode->getId() << ", Tag: " << currentNode->getTag() << endl;
-
-        Edge *currentEdge = currentNode->getFirstEdge();
-        while (currentEdge != nullptr)
-        {
-            cout << "  -> Edge: Source ID: " << currentEdge->getSourceId() << ", Target ID: " << currentEdge->getTargetId() << ", Direction: " << currentEdge->getDirection() << endl;
-            currentEdge = currentEdge->getNextEdge();
-        }
-
-        currentNode = currentNode->getNextNode();
-    }
 }
 
 void Graph::generateMaze()
@@ -221,8 +191,6 @@ void Graph::generateMaze()
     Node *node38 = this->insertNode("intermediario", "7,0");
     Node *node39 = this->insertNode("intermediario", "6,0");
 
-
-
     // NOVAS ADIÇÕES
     Node *node40 = this->insertNode("intermediario", "0,-1");
     Node *node41 = this->insertNode("intermediario", "0,-2");
@@ -246,10 +214,9 @@ void Graph::generateMaze()
     this->insertEdge(node44, node46, 3);
     this->insertEdge(node38, node47, 2);
 
-    //REMOVIDAS
-    // this->insertEdge(node17, node18, 3);
-    // this->insertEdge(node27, node28, 3);
-
+    // REMOVIDAS
+    //  this->insertEdge(node17, node18, 3);
+    //  this->insertEdge(node27, node28, 3);
 
     // 0 -- cima
     // 1 -- esquerda
@@ -296,7 +263,8 @@ void Graph::generateMaze()
     this->insertEdge(node38, node48, 3);
 }
 
-void Graph::generateSmallMaze(){
+void Graph::generateSmallMaze()
+{
     Node *node0 = this->insertNode("inicial", "2,2");
     Node *node1 = this->insertNode("intermediario", "1,2");
     Node *node2 = this->insertNode("intermediario", "1,1");
@@ -313,33 +281,34 @@ void Graph::generateSmallMaze(){
     this->insertEdge(node4, node5, 2);
     this->insertEdge(node3, node6, 0);
     this->insertEdge(node4, node7, 3);
-   
 }
 
-void Graph::extractNumbers(const std::string& s, int& num1, int& num2) {
+void Graph::extractNumbers(const std::string &s, int &num1, int &num2)
+{
     std::stringstream ss(s);
-    char comma;  // para armazenar a vírgula
+    char comma; // para armazenar a vírgula
 
     ss >> num1 >> comma >> num2;
 }
 
-double Graph::calculateHeuristic(string position, string finalPosition){
-  int positionX, positionY, finalPositionX, finalPositionY;
+double Graph::calculateHeuristic(string position, string finalPosition)
+{
+    int positionX, positionY, finalPositionX, finalPositionY;
 
-  this->extractNumbers(position, positionX, positionY);
-  this->extractNumbers(finalPosition, finalPositionX, finalPositionY);
+    this->extractNumbers(position, positionX, positionY);
+    this->extractNumbers(finalPosition, finalPositionX, finalPositionY);
 
-  double heuristic = sqrt(pow(finalPositionX - positionX, 2) + pow(finalPositionY - positionY, 2));
+    double heuristic = sqrt(pow(finalPositionX - positionX, 2) + pow(finalPositionY - positionY, 2));
 
-  return heuristic;
+    return heuristic;
 }
 
-
-void Graph::generateSmallMazeWithHeuristic(){
+void Graph::generateSmallMazeWithHeuristic()
+{
 
     string finalNodePosition = "3,1";
 
-    Node *node0 = this->insertNode("inicial",       "2,2", this->calculateHeuristic("2,2", finalNodePosition));
+    Node *node0 = this->insertNode("inicial", "2,2", this->calculateHeuristic("2,2", finalNodePosition));
     Node *node1 = this->insertNode("intermediario", "1,2", this->calculateHeuristic("1,2", finalNodePosition));
     Node *node2 = this->insertNode("intermediario", "1,1", this->calculateHeuristic("1,1", finalNodePosition));
     Node *node3 = this->insertNode("intermediario", "0,1", this->calculateHeuristic("0,1", finalNodePosition));
@@ -355,23 +324,22 @@ void Graph::generateSmallMazeWithHeuristic(){
     this->insertEdge(node4, node5, 2);
     this->insertEdge(node3, node7, 0);
     this->insertEdge(node4, node6, 3);
-   
 }
 
 void Graph::generateMazeWithHeuristic()
 {
     string finalPosition = "9,0";
 
-    Node *node0 =  this->insertNode("inicial", "0,4", this->calculateHeuristic("0,4", finalPosition));
-    Node *node1 =  this->insertNode("intermediario", "2,4", this->calculateHeuristic("2,4", finalPosition));
-    Node *node2 =  this->insertNode("intermediario", "2,3", this->calculateHeuristic("2,3", finalPosition));
-    Node *node3 =  this->insertNode("intermediario", "1,3", this->calculateHeuristic("1,3", finalPosition));
-    Node *node4 =  this->insertNode("intermediario", "0,2", this->calculateHeuristic("0,2", finalPosition));
-    Node *node5 =  this->insertNode("intermediario", "1,2", this->calculateHeuristic("1,2", finalPosition));
-    Node *node6 =  this->insertNode("intermediario", "1,1", this->calculateHeuristic("1,1", finalPosition));
-    Node *node7 =  this->insertNode("intermediario", "2,1", this->calculateHeuristic("2,1", finalPosition));
-    Node *node8 =  this->insertNode("intermediario", "2,2", this->calculateHeuristic("2,2", finalPosition));
-    Node *node9 =  this->insertNode("intermediario", "3,2", this->calculateHeuristic("3,2", finalPosition));
+    Node *node0 = this->insertNode("inicial", "0,4", this->calculateHeuristic("0,4", finalPosition));
+    Node *node1 = this->insertNode("intermediario", "2,4", this->calculateHeuristic("2,4", finalPosition));
+    Node *node2 = this->insertNode("intermediario", "2,3", this->calculateHeuristic("2,3", finalPosition));
+    Node *node3 = this->insertNode("intermediario", "1,3", this->calculateHeuristic("1,3", finalPosition));
+    Node *node4 = this->insertNode("intermediario", "0,2", this->calculateHeuristic("0,2", finalPosition));
+    Node *node5 = this->insertNode("intermediario", "1,2", this->calculateHeuristic("1,2", finalPosition));
+    Node *node6 = this->insertNode("intermediario", "1,1", this->calculateHeuristic("1,1", finalPosition));
+    Node *node7 = this->insertNode("intermediario", "2,1", this->calculateHeuristic("2,1", finalPosition));
+    Node *node8 = this->insertNode("intermediario", "2,2", this->calculateHeuristic("2,2", finalPosition));
+    Node *node9 = this->insertNode("intermediario", "3,2", this->calculateHeuristic("3,2", finalPosition));
     Node *node10 = this->insertNode("intermediario", "0,1", this->calculateHeuristic("0,1", finalPosition));
     Node *node11 = this->insertNode("intermediario", "0,0", this->calculateHeuristic("0,0", finalPosition));
     Node *node12 = this->insertNode("intermediario", "3,0", this->calculateHeuristic("3,0", finalPosition));
@@ -450,6 +418,5 @@ void Graph::generateMazeWithHeuristic()
     this->insertEdge(node38, node39, 1);
     this->insertEdge(node38, node40, 3);
 }
-
 
 #endif // GRAPH_H
