@@ -345,7 +345,6 @@ stack<TreeNode *> Tree::breadthFirstSearch(Graph *maze)
     if (maze->getFirstNode() == nullptr)
         return pilha;
 
-    // pega id do primeiro nó do labirinto == estado inicial
     Node *currentMazeNode = maze->getFirstNode();
 
     TreeNode *currentState = new TreeNode(currentMazeNode->getId());
