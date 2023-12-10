@@ -41,7 +41,8 @@ public:
     void setNextNode(Node *node);
     void setVisited();
 
-    void insertEdge(int sourceId, int targetId, int direction);
+    void insertEdge(int sourceId, int targetId, int direction, double weight);
+
 };
 
 // Construtor
@@ -126,13 +127,13 @@ void Node::setVisited()
     this->visited = true;
 }
 
-void Node::insertEdge(int sourceId, int targetId, int direction)
+void Node::insertEdge(int sourceId, int targetId, int direction, double weight)
 {
     // Verifies whether there are at least one edge in the node
     if (this->firstEdge != nullptr)
     {
         // Allocating the new edge and keeping the integrity of the edge list
-        Edge *edge = new Edge(sourceId, targetId);
+        Edge *edge = new Edge(sourceId, targetId, weight);
         edge->setDirection(direction);
         this->lastEdge->setNextEdge(edge);
         this->lastEdge = edge;
@@ -140,7 +141,7 @@ void Node::insertEdge(int sourceId, int targetId, int direction)
     else
     {
         // Allocating the new edge and keeping the integrity of the edge list
-        this->firstEdge = new Edge(sourceId, targetId);
+        this->firstEdge = new Edge(sourceId, targetId, weight);
         this->firstEdge->setDirection(direction);
         this->lastEdge = this->firstEdge;
     }
