@@ -6,7 +6,7 @@
 #define TREENODE_H
 
 #include <list>
-#include "Edge.h"
+#include "../maze/Edge.h"
 
 using namespace std;
 

@@ -6,7 +6,7 @@
 #include <string>
 #include <string.h>
 #include <cfloat>
-#include "perf.h"
+#include "include/perf/perf.h"
 
 using namespace std;
 

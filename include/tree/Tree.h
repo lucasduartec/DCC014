@@ -5,7 +5,7 @@
 #define TREE_H
 
 #include "TreeNode.h"
-#include "Graph.h"
+#include "../maze/Graph.h"
 #include <iostream>
 #include <stack>
 #include <queue>
