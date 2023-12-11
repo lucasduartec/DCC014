@@ -6,7 +6,7 @@
 #define TREENODE_H
 
 #include <list>
-#include "Edge.h"
+#include "../maze/Edge.h"
 
 using namespace std;
 
@@ -31,6 +31,8 @@ private:
 
     bool final; // Flag para saber se o estado é o final
 
+    double cost;
+
 public:
     TreeNode(int id);
     ~TreeNode();
@@ -46,6 +48,7 @@ public:
     Edge **getAvailableRules();
     bool getBacktracked();
     bool isFinal();
+    double getCost();
 
     // Setters
     void setFather(TreeNode *node);
@@ -57,6 +60,7 @@ public:
     void setAvailableRules(Edge *rules[4]);
     void setBacktracked(bool backtracked);
     void setFinal();
+    void setCost(double cost);
 };
 
 // Construtor
@@ -131,6 +135,11 @@ bool TreeNode::isFinal()
     return this->final;
 }
 
+double TreeNode::getCost()
+{
+    return this->cost;
+}
+
 // Setters
 
 void TreeNode::setFather(TreeNode *node)
@@ -181,6 +190,11 @@ void TreeNode::setBacktracked(bool backtracked)
 void TreeNode::setFinal()
 {
     this->final = true;
+}
+
+void TreeNode::setCost(double cost)
+{
+    this->cost = cost;
 }
 
 #endif // TREENODE_H

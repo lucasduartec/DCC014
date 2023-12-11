@@ -5,12 +5,20 @@
 #define TREE_H
 
 #include "TreeNode.h"
-#include "Graph.h"
+#include "../maze/Graph.h"
 #include <iostream>
 #include <stack>
 #include <queue>
 
 using namespace std;
+
+struct CompareCost
+{
+    bool operator()(TreeNode *a, TreeNode *b)
+    {
+        return a->getCost() > b->getCost();
+    }
+};
 
 class Tree
 {
@@ -43,7 +51,7 @@ public:
     stack<TreeNode *> breadthFirstSearch(Graph *maze);
     stack<TreeNode *> depthFirstSearch(Graph *maze);
     stack<TreeNode *> greedySearch(Graph *maze);
-    stack<TreeNode *> orderedSearch(Graph *maze);
+    stack<TreeNode *> uniformCostSearch(Graph *maze);
     stack<TreeNode *> aStarSearch(Graph *maze);
 };
 
@@ -633,6 +641,84 @@ stack<TreeNode *> Tree::greedySearch(Graph *maze)
     pilha.push(currentState);
 
     // printStack(pilha);
+
+    return pilha;
+}
+
+stack<TreeNode *> Tree::uniformCostSearch(Graph *maze)
+{
+    stack<TreeNode *> pilha;
+
+    if (maze->getFirstNode() == nullptr)
+        return pilha;
+
+    Node *currentMazeNode = maze->getFirstNode();
+
+    TreeNode *currentState = new TreeNode(currentMazeNode->getId());
+    currentState->setCost(0); // Defina o custo inicial como 0
+
+    insertRoot(currentState);
+
+    priority_queue<TreeNode *, vector<TreeNode *>, CompareCost> abertos;
+
+    Edge *chosenEdge = nullptr;
+
+    while (currentMazeNode->getTag() != "final")
+    {
+        Edge **availableRules = getAvailableRules(currentMazeNode, currentState);
+
+        currentState->setAvailableRules(availableRules);
+
+        // nó puxou as regras, logo foi visitado
+        currentMazeNode->setVisited();
+        this->visitedStatesNumber++;
+
+        for (int i = 0; i < 4; i++)
+        {
+            if (availableRules[i] != nullptr)
+            {
+                chosenEdge = availableRules[i];
+
+                // Cria novo nó cujo id é o nó destino daquela aresta no grafo
+                TreeNode *newTreeNode = new TreeNode(chosenEdge->getTargetId());
+
+                // Insere novo nó na árvore
+                this->insert(currentState, newTreeNode, chosenEdge);
+
+                // Remove aquela regra da lista de possíveis
+                availableRules[i] = nullptr;
+
+                // Seta regras disponíveis daquele novo nó
+                currentState->setAvailableRules(availableRules);
+
+                // Marca a aresta utilizada para chegar até o novo nó
+                newTreeNode->setUsedEdge(chosenEdge);
+
+                // Atualiza o custo acumulado até este nó
+                newTreeNode->setCost(currentState->getCost() + chosenEdge->getWeight());
+
+                // Troca nó atual do grafo de acordo com a aresta tomada
+                currentMazeNode = maze->getNodeById(chosenEdge->getTargetId());
+
+                abertos.push(newTreeNode);
+            }
+        }
+        currentState = abertos.top();
+        abertos.pop();
+        currentMazeNode = maze->getNodeById(currentState->getId());
+    }
+
+    //nó final
+    this->visitedStatesNumber++;
+
+    // coloca todos os nós da busca solução em uma pilha
+    while (currentState != this->root)
+    {
+        pilha.push(currentState);
+        currentState = currentState->getFather();
+    }
+    // add nó inicial
+    pilha.push(currentState);
 
     return pilha;
 }
