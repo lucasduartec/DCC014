@@ -405,9 +405,10 @@ stack<TreeNode *> Tree::breadthFirstSearch(Graph *maze)
         currentMazeNode = maze->getNodeById(currentState->getId());
     }
 
-    //nó final
+    // nó final
     this->visitedStatesNumber++;
 
+    currentState->setFinal();
 
     // coloca todos os nós da busca solução em uma pilha
     while (currentState != this->root)
@@ -481,8 +482,10 @@ stack<TreeNode *> Tree::depthFirstSearch(Graph *maze)
         currentMazeNode = maze->getNodeById(currentState->getId());
     }
 
-    //nó final
+    // nó final
     this->visitedStatesNumber++;
+
+    currentState->setFinal();
 
     // coloca todos os nós da busca solução em uma pilha
     while (currentState != this->root)
@@ -628,8 +631,10 @@ stack<TreeNode *> Tree::greedySearch(Graph *maze)
         currentMazeNode = maze->getNodeById(currentState->getId());
     }
 
-    //nó final
+    // nó final
     this->visitedStatesNumber++;
+
+    currentState->setFinal();
 
     // coloca todos os nós da busca solução em uma pilha
     while (currentState != this->root)
@@ -708,8 +713,10 @@ stack<TreeNode *> Tree::uniformCostSearch(Graph *maze)
         currentMazeNode = maze->getNodeById(currentState->getId());
     }
 
-    //nó final
+    // nó final
     this->visitedStatesNumber++;
+
+    currentState->setFinal();
 
     // coloca todos os nós da busca solução em uma pilha
     while (currentState != this->root)
