@@ -184,6 +184,21 @@ void Graph::generateSmallMaze()
     Node *node6 = this->insertNode("final", finalNodePosition, this->calculateHeuristic(finalNodePosition, finalNodePosition));
     Node *node7 = this->insertNode("intermediario", "0,2", this->calculateHeuristic("0,2", finalNodePosition));
 
+    //NOVAS ADIÇÕES
+    Node *node8 = this->insertNode("intermediario", "0,0", this->calculateHeuristic("0,0", finalNodePosition));
+    Node *node9 = this->insertNode("intermediario", "-1,0", this->calculateHeuristic("-1,0", finalNodePosition));
+    Node *node10 = this->insertNode("intermediario", "1,0", this->calculateHeuristic("1,0", finalNodePosition));
+    Node *node11 = this->insertNode("intermediario", "2,3", this->calculateHeuristic("2,3", finalNodePosition));
+    Node *node12 = this->insertNode("intermediario", "1,3", this->calculateHeuristic("1,3", finalNodePosition));
+
+    this->insertEdge(node3, node8, 2, this->calculateHeuristic("0,1", "0,0"));
+    this->insertEdge(node8, node9, 1, this->calculateHeuristic("0,0", "-1,0"));
+    this->insertEdge(node8, node10, 3, this->calculateHeuristic("0,0", "1,0"));
+    this->insertEdge(node1, node12, 0, this->calculateHeuristic("1,2",  "1,3"));
+    this->insertEdge(node12, node11, 0, this->calculateHeuristic("1,3",  "2,3"));
+
+
+    //ANTIGAS
     this->insertEdge(node0, node1, 1, this->calculateHeuristic("2,2", "1,2"));
     this->insertEdge(node1, node2, 2, this->calculateHeuristic("1,2", "1,1"));
     this->insertEdge(node2, node3, 1, this->calculateHeuristic("1,1", "0,1"));
@@ -191,6 +206,7 @@ void Graph::generateSmallMaze()
     this->insertEdge(node4, node5, 2, this->calculateHeuristic("2,1", "2,0"));
     this->insertEdge(node3, node7, 0, this->calculateHeuristic("0,1", "0,2"));
     this->insertEdge(node4, node6, 3, this->calculateHeuristic("2,1", finalNodePosition));
+ 
 }
 
 void Graph::generateMaze()
