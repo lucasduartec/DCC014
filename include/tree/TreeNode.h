@@ -32,6 +32,7 @@ private:
     bool final; // Flag para saber se o estado é o final
 
     double cost;
+    double fScore;
 
 public:
     TreeNode(int id);
@@ -49,6 +50,7 @@ public:
     bool getBacktracked();
     bool isFinal();
     double getCost();
+    double getFScore();
 
     // Setters
     void setFather(TreeNode *node);
@@ -61,6 +63,7 @@ public:
     void setBacktracked(bool backtracked);
     void setFinal();
     void setCost(double cost);
+    void setFScore(double fScore);
 };
 
 // Construtor
@@ -140,6 +143,11 @@ double TreeNode::getCost()
     return this->cost;
 }
 
+double TreeNode::getFScore()
+{
+    return this->fScore;
+}
+
 // Setters
 
 void TreeNode::setFather(TreeNode *node)
@@ -195,6 +203,11 @@ void TreeNode::setFinal()
 void TreeNode::setCost(double cost)
 {
     this->cost = cost;
+}
+
+void TreeNode::setFScore(double fScore)
+{
+    this->fScore = fScore;
 }
 
 #endif // TREENODE_H

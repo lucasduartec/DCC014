@@ -265,7 +265,7 @@ int main(int argc, char const *argv[])
 
     case 6:
         clock.start();
-        solution = searchTree->backtrackingSearch(maze);
+        solution = searchTree->aStarSearch(maze);
         clock.stop();
         statesNumber = searchTree->getStatesNumber();
         visitedStatesNumber = searchTree->getVisitedStatesNumber();
