@@ -124,7 +124,7 @@ void writeOutputFile(Graph *graph, Tree *searchTree, int option, int menuOption)
         // Chame a função exportGraphToDotFormat e escreva o resultado no arquivo
         if (option == 0)
         {
-            if (menuOption == 5)
+            if (menuOption == 5 || menuOption ==6)
                 outputFile << exportGraphToDotFormat(graph, true);
             else
                 outputFile << exportGraphToDotFormat(graph, false);
