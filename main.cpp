@@ -27,7 +27,7 @@ string formatFloat(float value, int precision, int totalLength)
     return returnString;
 }
 
-string exportGraphToDotFormat(Graph *graph)
+string exportGraphToDotFormat(Graph *graph, bool weighted)
 { // dot -Tpng output.dot -o graph1.png
     if (graph == nullptr)
         return "";
@@ -75,11 +75,10 @@ string exportGraphToDotFormat(Graph *graph)
             {
                 dot += "\n  " + to_string(nextNode->getId()) + connector +
                        to_string(graph->getNodeById(nextEdge->getTargetId())->getId());
-                // if (weightedEdge)
-                // {
-                //     dot += " [weight = " + formatFloat(nextEdge->getWeight(), 2, 5) +
-                //            "] [label = " + formatFloat(nextEdge->getWeight(), 2, 5) + "];";
-                // }
+                if (weighted)
+                {
+                    dot += " [label = " + formatFloat(nextEdge->getWeight(), 1, 5) + ", fontsize = 10];";
+                }
             }
             nextEdge = nextEdge->getNextEdge();
         }
@@ -107,7 +106,7 @@ string exportTreeToDotFormat(Tree *tree)
     return dot;
 }
 
-void writeOutputFile(Graph *graph, Tree *searchTree, int option)
+void writeOutputFile(Graph *graph, Tree *searchTree, int option, int menuOption)
 {
     // Especifique o caminho completo para a pasta onde deseja salvar o arquivo "output.dot"
     std::string outputPath;
@@ -124,7 +123,12 @@ void writeOutputFile(Graph *graph, Tree *searchTree, int option)
     {
         // Chame a função exportGraphToDotFormat e escreva o resultado no arquivo
         if (option == 0)
-            outputFile << exportGraphToDotFormat(graph);
+        {
+            if (menuOption == 5)
+                outputFile << exportGraphToDotFormat(graph, true);
+            else
+                outputFile << exportGraphToDotFormat(graph, false);
+        }
         else
             outputFile << exportTreeToDotFormat(searchTree);
 
@@ -174,7 +178,7 @@ int main(int argc, char const *argv[])
 {
 
     Graph *maze = new Graph();
-    maze->generateMaze();
+    maze->generateSmallMaze();
 
     Tree *searchTree = new Tree();
     std::stack<TreeNode *> solution;
@@ -272,8 +276,10 @@ int main(int argc, char const *argv[])
         break;
     }
 
-    writeOutputFile(maze, searchTree, 0);
-    writeOutputFile(maze, searchTree, 1);
+    // OPÇÃO 0 - CONVERTE GRAFO
+    writeOutputFile(maze, searchTree, 0, option);
+    // OPÇÃO 1 - CONVERTE ÁRVORE
+    writeOutputFile(maze, searchTree, 1, option);
 
     delete maze;
     delete searchTree;
