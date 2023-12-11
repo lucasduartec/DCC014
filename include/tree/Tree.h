@@ -12,25 +12,38 @@
 
 using namespace std;
 
+struct CompareCost
+{
+    bool operator()(TreeNode *a, TreeNode *b)
+    {
+        return a->getCost() > b->getCost();
+    }
+};
+
 class Tree
 {
-    // attributes
+
 private:
-    TreeNode *root;
+    TreeNode *root;          // Raíz da árvore
+    int statesNumber;        // Número de estados
+    int visitedStatesNumber; // Número de estados explorados
 
 public:
-    // Constructor
     Tree();
-
-    // Destructor
     ~Tree();
 
     // Operations
     void insert(TreeNode *currentState, TreeNode *newTreeNode, Edge *chosenEdge);
     void insertRoot(TreeNode *rootNode);
-    TreeNode *getRoot();
     void remove(TreeNode *node);
     void clearTree();
+
+    // Getters
+    TreeNode *getRoot();
+
+    // Aux
+    int getStatesNumber();
+    int getVisitedStatesNumber();
     void traverseAndPrint(TreeNode *node, string &dot);
 
     // Searches
@@ -38,17 +51,34 @@ public:
     stack<TreeNode *> breadthFirstSearch(Graph *maze);
     stack<TreeNode *> depthFirstSearch(Graph *maze);
     stack<TreeNode *> greedySearch(Graph *maze);
+    stack<TreeNode *> uniformCostSearch(Graph *maze);
+    stack<TreeNode *> aStarSearch(Graph *maze);
 };
+
 // Construtor
 Tree::Tree()
 {
     this->root = nullptr;
+    this->statesNumber = 0;
+    this->visitedStatesNumber = 0;
 }
 
 // Destrutor
 Tree::~Tree()
 {
     this->root = nullptr;
+    this->statesNumber = -1;
+    this->visitedStatesNumber = -1;
+}
+
+int Tree::getStatesNumber()
+{
+    return this->statesNumber;
+}
+
+int Tree::getVisitedStatesNumber()
+{
+    return this->visitedStatesNumber;
 }
 
 void Tree::insertRoot(TreeNode *rootNode)
@@ -127,6 +157,7 @@ void Tree::insert(TreeNode *currentState, TreeNode *newTreeNode, Edge *chosenEdg
         break;
     }
 
+    this->statesNumber++;
     newTreeNode->setUsedEdge(chosenEdge);
 }
 
@@ -251,6 +282,7 @@ stack<TreeNode *> Tree::backtrackingSearch(Graph *maze)
 
         // nó puxou as regras, logo foi visitado
         currentMazeNode->setVisited();
+        this->visitedStatesNumber++;
 
         // contador para verificar se todas as regras são nulas, pois se forem é necessário retornar para o pai
         int count = 0;
@@ -294,6 +326,9 @@ stack<TreeNode *> Tree::backtrackingSearch(Graph *maze)
             currentState->setBacktracked(true);
             currentState = currentState->getFather();
             currentMazeNode = maze->getNodeById(currentState->getId());
+
+            // corrigir problema do numero de estados visitados
+            this->visitedStatesNumber--;
         }
     }
 
@@ -318,7 +353,6 @@ stack<TreeNode *> Tree::breadthFirstSearch(Graph *maze)
     if (maze->getFirstNode() == nullptr)
         return pilha;
 
-    // pega id do primeiro nó do labirinto == estado inicial
     Node *currentMazeNode = maze->getFirstNode();
 
     TreeNode *currentState = new TreeNode(currentMazeNode->getId());
@@ -337,6 +371,7 @@ stack<TreeNode *> Tree::breadthFirstSearch(Graph *maze)
 
         // nó puxou as regras, logo foi visitado
         currentMazeNode->setVisited();
+        this->visitedStatesNumber++;
 
         for (int i = 0; i < 4; i++)
         {
@@ -369,6 +404,10 @@ stack<TreeNode *> Tree::breadthFirstSearch(Graph *maze)
         abertos.pop();
         currentMazeNode = maze->getNodeById(currentState->getId());
     }
+
+    //nó final
+    this->visitedStatesNumber++;
+
 
     // coloca todos os nós da busca solução em uma pilha
     while (currentState != this->root)
@@ -408,6 +447,7 @@ stack<TreeNode *> Tree::depthFirstSearch(Graph *maze)
 
         // nó puxou as regras, logo foi visitado
         currentMazeNode->setVisited();
+        this->visitedStatesNumber++;
 
         for (int i = 0; i < 4; i++)
         {
@@ -440,6 +480,9 @@ stack<TreeNode *> Tree::depthFirstSearch(Graph *maze)
         abertos.pop();
         currentMazeNode = maze->getNodeById(currentState->getId());
     }
+
+    //nó final
+    this->visitedStatesNumber++;
 
     // coloca todos os nós da busca solução em uma pilha
     while (currentState != this->root)
@@ -472,18 +515,17 @@ void orderByHeuristic(Edge **availableRules, Graph *maze)
     // Bubble sort
     for (int i = 0; i < 4; i++)
     {
-      for (int j = 0; j < 4 - i - 1; j++)
-      {
-        if (availableRules[j] != nullptr && availableRules[j + 1] != nullptr &&
-          maze->getNodeById(availableRules[j]->getTargetId())->getHeuristic() < maze->getNodeById(availableRules[j + 1]->getTargetId())->getHeuristic())
+        for (int j = 0; j < 4 - i - 1; j++)
         {
-          Edge *temp = availableRules[j];
-          availableRules[j] = availableRules[j + 1];
-          availableRules[j + 1] = temp;
+            if (availableRules[j] != nullptr && availableRules[j + 1] != nullptr &&
+                maze->getNodeById(availableRules[j]->getTargetId())->getHeuristic() < maze->getNodeById(availableRules[j + 1]->getTargetId())->getHeuristic())
+            {
+                Edge *temp = availableRules[j];
+                availableRules[j] = availableRules[j + 1];
+                availableRules[j + 1] = temp;
+            }
         }
-      }
     }
-
 
     // cout << "Ordered Rules: ";
     // for (int i = 0; i < 4; i++)
@@ -499,33 +541,32 @@ void orderByHeuristic(Edge **availableRules, Graph *maze)
 
 void pushInOpenedStack(Edge **availableRules, stack<TreeNode *> &abertos)
 {
-  for (int i = 0; i < 4; i++)
-  {
-    if (availableRules[i] != nullptr)
+    for (int i = 0; i < 4; i++)
     {
-      abertos.push(new TreeNode(availableRules[i]->getTargetId()));
+        if (availableRules[i] != nullptr)
+        {
+            abertos.push(new TreeNode(availableRules[i]->getTargetId()));
+        }
     }
-  }
 }
 
 void printStack(stack<TreeNode *> pilha)
 {
-  cout << "Stack: ";
-  while (!pilha.empty())
-  {
-    TreeNode *node = pilha.top();
-    pilha.pop();
-
-    if (pilha.size() != 0)
+    cout << "Stack: ";
+    while (!pilha.empty())
     {
-      cout << node->getId() << " -> ";
-    }
-    else
-      cout << node->getId() << " ";
-  }
-  cout << " ___ " << endl;
-}
+        TreeNode *node = pilha.top();
+        pilha.pop();
 
+        if (pilha.size() != 0)
+        {
+            cout << node->getId() << " -> ";
+        }
+        else
+            cout << node->getId() << " ";
+    }
+    cout << " ___ " << endl;
+}
 
 stack<TreeNode *> Tree::greedySearch(Graph *maze)
 {
@@ -552,10 +593,11 @@ stack<TreeNode *> Tree::greedySearch(Graph *maze)
 
         // nó puxou as regras, logo foi visitado
         currentMazeNode->setVisited();
+        this->visitedStatesNumber++;
 
         for (int i = 0; i < 4; i++)
         {
-            
+
             if (availableRules[i] != nullptr)
             {
                 chosenEdge = availableRules[i];
@@ -586,6 +628,9 @@ stack<TreeNode *> Tree::greedySearch(Graph *maze)
         currentMazeNode = maze->getNodeById(currentState->getId());
     }
 
+    //nó final
+    this->visitedStatesNumber++;
+
     // coloca todos os nós da busca solução em uma pilha
     while (currentState != this->root)
     {
@@ -600,7 +645,82 @@ stack<TreeNode *> Tree::greedySearch(Graph *maze)
     return pilha;
 }
 
+stack<TreeNode *> Tree::uniformCostSearch(Graph *maze)
+{
+    stack<TreeNode *> pilha;
 
+    if (maze->getFirstNode() == nullptr)
+        return pilha;
 
+    Node *currentMazeNode = maze->getFirstNode();
+
+    TreeNode *currentState = new TreeNode(currentMazeNode->getId());
+    currentState->setCost(0); // Defina o custo inicial como 0
+
+    insertRoot(currentState);
+
+    priority_queue<TreeNode *, vector<TreeNode *>, CompareCost> abertos;
+
+    Edge *chosenEdge = nullptr;
+
+    while (currentMazeNode->getTag() != "final")
+    {
+        Edge **availableRules = getAvailableRules(currentMazeNode, currentState);
+
+        currentState->setAvailableRules(availableRules);
+
+        // nó puxou as regras, logo foi visitado
+        currentMazeNode->setVisited();
+        this->visitedStatesNumber++;
+
+        for (int i = 0; i < 4; i++)
+        {
+            if (availableRules[i] != nullptr)
+            {
+                chosenEdge = availableRules[i];
+
+                // Cria novo nó cujo id é o nó destino daquela aresta no grafo
+                TreeNode *newTreeNode = new TreeNode(chosenEdge->getTargetId());
+
+                // Insere novo nó na árvore
+                this->insert(currentState, newTreeNode, chosenEdge);
+
+                // Remove aquela regra da lista de possíveis
+                availableRules[i] = nullptr;
+
+                // Seta regras disponíveis daquele novo nó
+                currentState->setAvailableRules(availableRules);
+
+                // Marca a aresta utilizada para chegar até o novo nó
+                newTreeNode->setUsedEdge(chosenEdge);
+
+                // Atualiza o custo acumulado até este nó
+                newTreeNode->setCost(currentState->getCost() + chosenEdge->getWeight());
+
+                // Troca nó atual do grafo de acordo com a aresta tomada
+                currentMazeNode = maze->getNodeById(chosenEdge->getTargetId());
+
+                abertos.push(newTreeNode);
+            }
+        }
+        currentState = abertos.top();
+        abertos.pop();
+        currentMazeNode = maze->getNodeById(currentState->getId());
+    }
+
+    //nó final
+    this->visitedStatesNumber++;
+
+    // coloca todos os nós da busca solução em uma pilha
+    while (currentState != this->root)
+    {
+        pilha.push(currentState);
+        currentState = currentState->getFather();
+    }
+    // add nó inicial
+    pilha.push(currentState);
+
+    return pilha;
+}
 
 #endif // TREE_H

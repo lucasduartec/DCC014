@@ -6,6 +6,8 @@
 #include <string>
 #include <string.h>
 #include <cfloat>
+#include "perf.h"
+
 using namespace std;
 
 string formatFloat(float value, int precision, int totalLength)
@@ -135,8 +137,10 @@ void writeOutputFile(Graph *graph, Tree *searchTree, int option)
     }
 }
 
-void printSolution(stack<TreeNode *> pilha, string search)
+void printSolution(stack<TreeNode *> pilha, string search, Perf::PerformanceTimer clock, int statesNumber, int visitedStatesNumber)
 {
+    stringstream formattedTime;
+
     cout << search + "Solution: ";
     while (!pilha.empty())
     {
@@ -150,7 +154,20 @@ void printSolution(stack<TreeNode *> pilha, string search)
         else
             cout << node->getId() << " ";
     }
-    cout << " ___ " << endl;
+    cout << " ENDED " << endl;
+
+    // transforma em mili segundos
+    double elapsedTimeInSeconds = clock.elapsed_time();
+    double elapsedTimeInMilliseconds = elapsedTimeInSeconds * 1000;
+
+    formattedTime << std::fixed << std::setprecision(6) << elapsedTimeInMilliseconds;
+    string timeStr = formattedTime.str();
+
+    cout << endl
+         << "Tempo: " << timeStr << " milisegundos";
+    cout << endl;
+    cout << "Estados gerados: " << statesNumber << " estados" << endl;
+    cout << "Estados visitados: " << visitedStatesNumber << " estados" << endl;
 }
 
 int main(int argc, char const *argv[])
@@ -162,56 +179,93 @@ int main(int argc, char const *argv[])
     Tree *searchTree = new Tree();
     std::stack<TreeNode *> solution;
 
-    int option = 0;
+    // clock
+    Perf::PerformanceTimer clock;
 
-    while (option < 1 || option > 6)
+    // aux var
+    int statesNumber = 0;
+    int visitedStatesNumber = 0;
+
+    int option = -1;
+
+    std::cout << "+---------------------------+" << std::endl
+              << "|   PROBLEMA DO LABIRINTO   |" << std::endl
+              << "|      MÉTODOS DE BUSCA     |" << std::endl
+              << "+---------------------------+" << std::endl
+              << "|    Selecione a busca:     |" << std::endl
+              << "|                           |" << std::endl
+              << "| [1] Busca backtracking    |" << std::endl
+              << "| [2] Busca em largura      |" << std::endl
+              << "| [3] Busca em profundidade |" << std::endl
+              << "| [4] Busca gulosa          |" << std::endl
+              << "| [5] Busca ordenada        |" << std::endl
+              << "| [6] Busca A*              |" << std::endl
+              << "|                           |" << std::endl
+              << "| [0] Sair                  |" << std::endl
+              << "+---------------------------+" << std::endl;
+
+    while (option < 0 || option > 6)
     {
-
-        cout << endl
-             << "Selecione a busca: " << endl
-             << endl
-             << "[1] Busca backtracking" << endl
-             << "[2] Busca em largura" << endl
-             << "[3] Busca em profundidade" << endl
-             << "[4] Busca gulosa" << endl
-             << "[5] Busca ordenada" << endl
-             << "[6] Busca A*" << endl
-             << endl;
-
-        cin >> option;
+        std::cout << "  Digite sua opção: ";
+        std::cin >> option;
+        std::cout << endl;
     }
 
     switch (option)
     {
 
     case 1:
+        clock.start();
         solution = searchTree->backtrackingSearch(maze);
-        printSolution(solution, "Backtracking Search");
+        clock.stop();
+        statesNumber = searchTree->getStatesNumber();
+        visitedStatesNumber = searchTree->getVisitedStatesNumber();
+        printSolution(solution, "Backtracking Search", clock, statesNumber, visitedStatesNumber);
         break;
 
     case 2:
+        clock.start();
         solution = searchTree->breadthFirstSearch(maze);
-        printSolution(solution, "Breadth-First Search");
+        clock.stop();
+        statesNumber = searchTree->getStatesNumber();
+        visitedStatesNumber = searchTree->getVisitedStatesNumber();
+        printSolution(solution, "Breadth-First Search", clock, statesNumber, visitedStatesNumber);
         break;
 
     case 3:
+        clock.start();
         solution = searchTree->depthFirstSearch(maze);
-        printSolution(solution, "Depth-First Search");
+        clock.stop();
+        statesNumber = searchTree->getStatesNumber();
+        visitedStatesNumber = searchTree->getVisitedStatesNumber();
+        printSolution(solution, "Depth-First Search", clock, statesNumber, visitedStatesNumber);
         break;
 
     case 4:
+        clock.start();
         solution = searchTree->greedySearch(maze);
-        printSolution(solution, "Greedy Search");
+        clock.stop();
+        statesNumber = searchTree->getStatesNumber();
+        visitedStatesNumber = searchTree->getVisitedStatesNumber();
+        printSolution(solution, "Greedy Search", clock, statesNumber, visitedStatesNumber);
         break;
 
     case 5:
-        solution = searchTree->backtrackingSearch(maze);
-        printSolution(solution, "Best-First Search");
+        clock.start();
+        solution = searchTree->uniformCostSearch(maze);
+        clock.stop();
+        statesNumber = searchTree->getStatesNumber();
+        visitedStatesNumber = searchTree->getVisitedStatesNumber();
+        printSolution(solution, "Uniform Cost Search", clock, statesNumber, visitedStatesNumber);
         break;
 
     case 6:
+        clock.start();
         solution = searchTree->backtrackingSearch(maze);
-        printSolution(solution, "A-Star Search");
+        clock.stop();
+        statesNumber = searchTree->getStatesNumber();
+        visitedStatesNumber = searchTree->getVisitedStatesNumber();
+        printSolution(solution, "A-Star Search", clock, statesNumber, visitedStatesNumber);
         break;
 
     default:

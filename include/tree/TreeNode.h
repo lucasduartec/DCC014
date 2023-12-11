@@ -17,33 +17,28 @@ class TreeNode
 
 private:
     int id;
-    TreeNode *father;
+    TreeNode *father; // Ponteiro para estado pai
     TreeNode *topChild;
     TreeNode *leftChild;
     TreeNode *downChild;
     TreeNode *rightChild;
 
-    // Aresta usada para chegar naquele nó
-    Edge *usedEdge;
+    Edge *usedEdge; // Aresta usada para chegar naquele nó
 
-    // Regras disponíveis aplicáveis a partir daquele nó
-    Edge *availableRules[4];
+    Edge *availableRules[4]; // Regras disponíveis aplicáveis a partir daquele nó
 
-    // Atributo para saber se o nó realizou backtracking
-    bool backtracked;
+    bool backtracked; // Flag para saber se o nó realizou backtracking
 
-    bool final;
+    bool final; // Flag para saber se o estado é o final
+
+    double cost;
 
 public:
-    // Construtor
     TreeNode(int id);
-
-    // Destrutor
     ~TreeNode();
 
     // Getters
     int getId() { return this->id; };
-
     TreeNode *getFather();
     TreeNode *getTopChild();
     TreeNode *getLeftChild();
@@ -53,6 +48,7 @@ public:
     Edge **getAvailableRules();
     bool getBacktracked();
     bool isFinal();
+    double getCost();
 
     // Setters
     void setFather(TreeNode *node);
@@ -64,6 +60,7 @@ public:
     void setAvailableRules(Edge *rules[4]);
     void setBacktracked(bool backtracked);
     void setFinal();
+    void setCost(double cost);
 };
 
 // Construtor
@@ -138,6 +135,11 @@ bool TreeNode::isFinal()
     return this->final;
 }
 
+double TreeNode::getCost()
+{
+    return this->cost;
+}
+
 // Setters
 
 void TreeNode::setFather(TreeNode *node)
@@ -188,6 +190,11 @@ void TreeNode::setBacktracked(bool backtracked)
 void TreeNode::setFinal()
 {
     this->final = true;
+}
+
+void TreeNode::setCost(double cost)
+{
+    this->cost = cost;
 }
 
 #endif // TREENODE_H
