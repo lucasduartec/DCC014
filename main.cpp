@@ -178,7 +178,7 @@ int main(int argc, char const *argv[])
 {
 
     Graph *maze = new Graph();
-    maze->generateSmallMaze();
+    maze->generateMaze();
 
     Tree *searchTree = new Tree();
     std::stack<TreeNode *> solution;

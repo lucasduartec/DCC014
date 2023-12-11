@@ -385,17 +385,8 @@ stack<TreeNode *> Tree::breadthFirstSearch(Graph *maze)
                 // Insere novo nó na árvore
                 this->insert(currentState, newTreeNode, chosenEdge);
 
-                // Remove aquela regra da lista de possíveis
-                availableRules[i] = nullptr;
-
-                // Seta regras disponíveis daquele novo nó
-                currentState->setAvailableRules(availableRules);
-
                 // Marca a aresta utilizada para chegar até o novo nó
                 newTreeNode->setUsedEdge(chosenEdge);
-
-                // Troca nó atual do grafo de acordo com a aresta tomada
-                currentMazeNode = maze->getNodeById(chosenEdge->getTargetId());
 
                 abertos.push(newTreeNode);
             }
@@ -462,17 +453,8 @@ stack<TreeNode *> Tree::depthFirstSearch(Graph *maze)
                 // Insere novo nó na árvore
                 this->insert(currentState, newTreeNode, chosenEdge);
 
-                // Remove aquela regra da lista de possíveis
-                availableRules[i] = nullptr;
-
-                // Seta regras disponíveis daquele novo nó
-                currentState->setAvailableRules(availableRules);
-
                 // Marca a aresta utilizada para chegar até o novo nó
                 newTreeNode->setUsedEdge(chosenEdge);
-
-                // Troca nó atual do grafo de acordo com a aresta tomada
-                currentMazeNode = maze->getNodeById(chosenEdge->getTargetId());
 
                 abertos.push(newTreeNode);
             }
