@@ -252,11 +252,11 @@ int main(int argc, char const *argv[])
 
     case 5:
         clock.start();
-        solution = searchTree->backtrackingSearch(maze);
+        solution = searchTree->uniformCostSearch(maze);
         clock.stop();
         statesNumber = searchTree->getStatesNumber();
         visitedStatesNumber = searchTree->getVisitedStatesNumber();
-        printSolution(solution, "Best-First Search", clock, statesNumber, visitedStatesNumber);
+        printSolution(solution, "Uniform Cost Search", clock, statesNumber, visitedStatesNumber);
         break;
 
     case 6:
