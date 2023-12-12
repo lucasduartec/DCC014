@@ -17,5 +17,7 @@ Para auxiliar na compilação do projeto, foi utilizada a ferramenta **cmake**. 
 `sudo apt-get -y install cmake`
 
 Depois de ter instalado o **Graphviz** e o **cmake**, o sistema estará apto para executar o programa.
-Certifique-se de que está no diretório raíz do projeto. Primeiro crie a pasta usada para **build** com `mkdir build` e depois já poderá rodar o programa com o script:<br/>
+Certifique-se de que está no diretório raíz do projeto. Primeiro crie a pasta usada para **build** com `mkdir build && cmake .` e depois já poderá rodar o programa com o script:<br/>
 `./scripts/run.sh`
+
+A imagem da árvore da busca escolhida será gerada dentro da pasta `images`.
