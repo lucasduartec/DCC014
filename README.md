@@ -1,6 +1,8 @@
-# Problema do Labirinto
+# DCC014 - Inteligência Artificial
 
 Implementação do trabalho da disciplina DCC014 - Inteligência Artificial durante o período 2023.3 na Universidade Federal de Juiz de Fora.
+
+# Problema do Labirinto
 
 ##### Visualização
 
